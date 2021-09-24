@@ -1,5 +1,5 @@
-import sqlite3
 import os.path
+import sqlite3
 
 
 def setup_database():
@@ -84,6 +84,7 @@ def add_admin():
 def main():
     if not os.path.exists('test_db.db'):
         setup_database()
+
     pass
 
 

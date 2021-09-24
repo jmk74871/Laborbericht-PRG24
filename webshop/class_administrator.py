@@ -7,19 +7,25 @@ class Administrator(Benutzer):
         self.__personal_nummer = personal_nummer
         self.__abteilung = abteilung
 
-    def add_product(self):
+    def __add_product(self):
         pass
 
-    def add_kunde(self, benutzer_name, passwort, vorname, nachname):
+    def __add_kunde(benutzer_name, passwort, vorname, nachname):
 
-        conn = sqlite3.connect('test_db.db')
+        conn = sqlite3.connect('../test_db.db')
 
+        # add Benutzer to DB
         conn.execute(f"INSERT INTO BENUTZER(BENUTZERNAME,PASSWORT) VALUES('{benutzer_name}','{passwort}');")
+        conn.commit()
 
+        # find benutzer_id
         cursor = conn.execute(f"SELECT ID,BENUTZERNAME from BENUTZER")
         for row in cursor:
             if benutzer_name == row[1]:
                 benutzer_id = row[0]
 
+        # add Kunde to DB
         conn.execute(f"INSERT INTO KUNDE(BENUTZER_ID,VORNAME,NACHNAME) VALUES({benutzer_id},'{vorname}','{nachname}');")
+        conn.commit()
+
         conn.close()

@@ -10,7 +10,7 @@ class Adresse():
         self.__adress_id = adress_id
         if adress_id is None:
             self.__adress_id = self.request_id()
-        self.db_path = 'csv_db/adress_db.csv'
+        self.db_path = '../csv_db/adress_db.csv'
 
     def __request_id():
         # ToDO: create method to get a unique id

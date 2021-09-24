@@ -7,7 +7,7 @@ class Bankverbindung():
         self.__bank_id = bank_id
         if bank_id is None:
             self.__bank_id = self.request_id()
-        self.db_path = 'csv_db/bank_info_db.csv'
+        self.db_path = '../csv_db/bank_info_db.csv'
 
     def __request_id():
         # ToDO: create method to get a unique id

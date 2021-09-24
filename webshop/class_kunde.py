@@ -9,7 +9,7 @@ class Kunde(Benutzer):
         self.__nachname = nachname
         self.__adresse = adresse
         self.__bankverbindung = bankverbindung
-        self.db_path = 'csv_db/kunden_db.csv'
+        self.db_path = '../csv_db/kunden_db.csv'
 
     def add_adresse(self, strasse, hausnummer, plz, stadt):
         new_adress = Adresse(strasse, hausnummer, plz, stadt)

@@ -1,0 +1,5 @@
+from class_benutzer import Benutzer
+from class_administrator import Administrator
+from class_kunde import Kunde
+from class_adresse import Adresse
+from class_bankverbindung import Bankverbindung
