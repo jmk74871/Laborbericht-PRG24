@@ -9,6 +9,7 @@ class Kunde(Benutzer):
         self.__nachname = nachname
         self.__adresse = adresse
         self.__bankverbindung = bankverbindung
+        self.__bestellungen = []
         self.db_path = '../test_db.db'
 
     def add_adresse(self, strasse, hausnummer, plz, stadt):
