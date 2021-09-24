@@ -76,8 +76,6 @@ def setup_database():
     conn.close()
     print('Connection to DB closed')
 
-    add_admin()
-
 def add_admin():
 
     print('creating initial admin user')
