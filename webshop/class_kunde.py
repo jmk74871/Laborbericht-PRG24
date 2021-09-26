@@ -3,12 +3,12 @@ from class_adresse import Adresse
 from class_bankverbindung import Bankverbindung
 
 class Kunde(Benutzer):
-    def __init__(self, benutzer_id, benutzer_name, passwort, vorname, nachname, adresse=[], bankverbindung=[]):
+    def __init__(self, benutzer_id, benutzer_name, passwort, vorname, nachname):
         super().__init__(benutzer_id, benutzer_name, passwort)
-        self.__vorname = vorname
-        self.__nachname = nachname
-        self.__adresse = adresse
-        self.__bankverbindung = bankverbindung
+        self.__vorname = str(vorname)
+        self.__nachname = str(nachname)
+        self.__adresse = []
+        self.__bankverbindung = []
         self.__bestellungen = []
         self.db_path = '../test_db.db'
 

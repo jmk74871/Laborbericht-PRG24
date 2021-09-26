@@ -1,13 +1,15 @@
+from datetime import datetime
+
 from class_kunde import Kunde
 import sqlite3
 
 class Bestellung():
 
     def __init__(self, id, benutzer_id, bestelldatum, bestellstatus='offen'):
-        self.__id = id
-        self.__benutzer_id = benutzer_id
-        self.__bestelldatum = bestelldatum
-        self.__bestellstatus = bestellstatus
+        self.__id = int(id)
+        self.__benutzer_id = int(benutzer_id)
+        self.__bestelldatum = datetime(bestelldatum)
+        self.__bestellstatus = str(bestellstatus)
         self.__bestellposten = []
         self.db_path = "../test_db.db"
 

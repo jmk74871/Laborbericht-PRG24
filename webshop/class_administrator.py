@@ -4,8 +4,8 @@ import sqlite3
 class Administrator(Benutzer):
     def __init__(self, benutzer_id, benutzer_name, passwort, personal_nummer, abteilung):
         super().__init__(benutzer_id, benutzer_name, passwort)
-        self.__personal_nummer = personal_nummer
-        self.__abteilung = abteilung
+        self.__personal_nummer = str(personal_nummer)
+        self.__abteilung = str(abteilung)
 
     def __add_product(self):
         pass
