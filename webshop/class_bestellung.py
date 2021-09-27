@@ -1,7 +1,6 @@
 from datetime import datetime
-
-from class_kunde import Kunde
 import sqlite3
+from webshop.class_bestellposten import Bestellposten
 
 
 class Bestellung():

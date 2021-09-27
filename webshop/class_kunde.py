@@ -1,6 +1,8 @@
-from class_benutzer import Benutzer
-from class_adresse import Adresse
-from class_bankverbindung import Bankverbindung
+from webshop.class_benutzer import Benutzer
+from webshop.class_adresse import Adresse
+from webshop.class_bankverbindung import Bankverbindung
+from webshop.class_bestellung import Bestellung
+
 
 class Kunde(Benutzer):
     def __init__(self, benutzer_id, benutzer_name, passwort, vorname, nachname):

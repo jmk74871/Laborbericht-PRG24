@@ -1,4 +1,4 @@
-from class_benutzer import Benutzer
+from webshop.class_benutzer import Benutzer
 import sqlite3
 
 class Administrator(Benutzer):

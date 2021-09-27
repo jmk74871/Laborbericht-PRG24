@@ -1,4 +1,4 @@
-from class_produkt import Produkt
+from webshop.class_produkt import Produkt
 
 class Akkutraeger(Produkt):
 
