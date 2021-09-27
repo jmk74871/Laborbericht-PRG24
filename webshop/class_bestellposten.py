@@ -1,6 +1,3 @@
-from class_bestellung import Bestellung
-
-
 class Bestellposten():
 
     def __init__(self, posten_id, produkt_id, menge):
