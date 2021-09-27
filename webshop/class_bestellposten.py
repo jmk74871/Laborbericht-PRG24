@@ -3,8 +3,10 @@ from class_bestellung import Bestellung
 
 class Bestellposten():
 
-    def __init__(self, id, bestell_id, produkt_id, menge):
-        self.__id = int(id)
-        self.__bestell_id = int(bestell_id)
+    def __init__(self, posten_id, produkt_id, menge):
+        self.__posten_id = int(posten_id)
         self.__produkt_id = int(produkt_id)
-        self.__menge = int(menge)
+
+    def get_total(self):
+        # todo: implement method to lookup the price the product and multiply by the quantity.
+        pass

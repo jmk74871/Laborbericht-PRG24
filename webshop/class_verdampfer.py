@@ -3,11 +3,11 @@ from class_produkt import Produkt
 
 class Verdampfer(Produkt):
 
-    def __init__(self, produkt_id, produktbezeichnung, preis, hersteller, durchmesser, hoehe, fuellsyst):
+    def __init__(self, produkt_id, produktbezeichnung, preis, hersteller, durchmesser, hoehe, fuellsystem):
         super().__init__(produkt_id, produktbezeichnung, preis, hersteller)
         self.__hoehe = float(hoehe)
         self.__durchmesser = float(durchmesser)
-        self.__fuellsyst = str(fuellsyst)
+        self.__fuellsystem = str(fuellsystem)
 
 
     def display_info(self):

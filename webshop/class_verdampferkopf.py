@@ -14,4 +14,9 @@ class Verdampferkopf(Produkt):
 
     def display_matching(self):
         # todo: method to display matching verdampfer.
+        print('Passende Verdampfer zu diesem Verdampferkopf sind:\n')
+        #
+        # for row in search:
+        #     pass
+        #
         pass

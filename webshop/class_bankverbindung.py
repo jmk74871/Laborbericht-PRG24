@@ -1,6 +1,6 @@
 class Bankverbindung():
 
-    def __init__(self, kontoinhaber, iban, bic, bank_id=None):
+    def __init__(self, bank_id, kontoinhaber, iban, bic):
         self.__kontoinhaber = str(kontoinhaber)
         self.__iban = str(iban)
         self.__bic = str(bic)

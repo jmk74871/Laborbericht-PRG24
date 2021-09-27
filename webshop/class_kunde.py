@@ -22,3 +22,15 @@ class Kunde(Benutzer):
         new_bank_info = Bankverbindung(kontoinhaber, iban, bic)
         if new_bank_info.save_to_db():
             self.__bankverbindung.append(new_bank_info.get_id())
+
+    def __get_adresses_from_db(self):
+        #todo: implement method to get adresses from db.
+        pass
+
+    def __get_bankinfo_from_db(self):
+        # todo: implement method to get adresses from db.
+        pass
+
+    def __get_bestellungen_from_db(self):
+        # todo: implement method to get adresses from db.
+        pass

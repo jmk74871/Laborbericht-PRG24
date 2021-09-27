@@ -8,5 +8,9 @@ class Starterset(Produkt):
         # toDO: load/create objects for the components on creation.
 
     def display_info(self):
-        print(f'Verdampferkopf {self.__prodoktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand '
-              f'von {self.__wiederstand} Ohm. \nPreis:{self.__preis}')
+        print(f'Das Set {self.__prodoktbezeichnung} enthält:\n')
+
+        # for component in components:
+        #     component.display_info()
+
+        print(f'Preis:{self.__preis}')
