@@ -5,14 +5,14 @@ from webshop.class_bestellung import Bestellung
 
 
 class Kunde(Benutzer):
-    def __init__(self, benutzer_id: int, benutzer_name: str, passwort: str, vorname: str, nachname:str):
+    def __init__(self, benutzer_id: int, benutzer_name: str, passwort: str, vorname: str, nachname:str) -> object:
         super().__init__(benutzer_id, benutzer_name, passwort)
         self.__vorname = str(vorname)
         self.__nachname = str(nachname)
         self.__adresse = []
         self.__bankverbindung = []
         self.__bestellungen = []
-        self.__db_path = '../test_db.db'
+        self.__db_path = 'test_db.db'
 
     def add_adresse(self, strasse, hausnummer, plz, stadt):
         new_adress = Adresse(strasse, hausnummer, plz, stadt)

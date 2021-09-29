@@ -5,9 +5,11 @@ def setup_database():
     conn = sqlite3.connect('test_db.db')
     print('DB created successfully!')
 
-    conn.execute("PRAGMA foreign_keys=on;")
+    cursor = conn.cursor()
 
-    conn.execute('''CREATE TABLE "BENUTZER" (
+    cursor.execute("PRAGMA foreign_keys=on;")
+
+    cursor.execute('''CREATE TABLE "BENUTZER" (
         "BENUTZER_ID"	INTEGER NOT NULL UNIQUE,
         "BENUTZERNAME"	TEXT NOT NULL UNIQUE,
         "PASSWORT"	TEXT NOT NULL,
@@ -21,7 +23,7 @@ def setup_database():
         ''')
     print('Table BENUTZER created successfully!')
 
-    # conn.execute('''CREATE TABLE "ADMINISTRATOREN"
+    # cursor.execute('''CREATE TABLE "ADMINISTRATOREN"
     #      (ID INTEGER NOT NULL UNIQUE,
     #      BENUTZER_ID INT NOT NULL,
     #      PERSONALNUMMER TEXT NOT NULL,
@@ -31,7 +33,7 @@ def setup_database():
     #          ''')
     # print('Table ADMINISTRATOR created successfully!')
     #
-    # conn.execute('''CREATE TABLE "KUNDEN"
+    # cursor.execute('''CREATE TABLE "KUNDEN"
     #         ("ID"	INTEGER NOT NULL UNIQUE,
     #         "BENUTZER_ID"	INTEGER NOT NULL,
     #         "VORNAME" TEXT NOT NULL,
@@ -45,7 +47,7 @@ def setup_database():
     #         ''')
     # print('Table KUNDEN created successfully!')
 
-    conn.execute('''CREATE TABLE "ADRESSEN" 
+    cursor.execute('''CREATE TABLE "ADRESSEN" 
         ("ADRESS_ID"	INTEGER NOT NULL UNIQUE,
         "BENUTZER_ID"	INTEGER NOT NULL,
         "STRASSE"	TEXT NOT NULL,
@@ -57,7 +59,7 @@ def setup_database():
         ''')
     print('Table ADRESSEN created successfully!')
 
-    conn.execute('''CREATE TABLE "BANKVERBINDUNGEN" 
+    cursor.execute('''CREATE TABLE "BANKVERBINDUNGEN" 
         ("BANK_ID"	INTEGER NOT NULL UNIQUE,
         "BENUTZER_ID"	INTEGER NOT NULL,
         "KONTOINHABER"	TEXT NOT NULL,
@@ -68,7 +70,7 @@ def setup_database():
         ''')
     print('Table BANKVERBINDUNGEN created successfully!')
 
-    conn.execute('''CREATE TABLE "BESTELLUNGEN" (
+    cursor.execute('''CREATE TABLE "BESTELLUNGEN" (
         "BESTELL_ID"	INTEGER NOT NULL UNIQUE,
         "BENUTZER_ID"	INTEGER NOT NULL,
         "BESTELLDATUM"	TEXT NOT NULL,
@@ -78,7 +80,7 @@ def setup_database():
             ''')
     print('Table BESTELLUNGEN created successfully!')
 
-    conn.execute('''CREATE TABLE "BESTELLPOSTEN" (
+    cursor.execute('''CREATE TABLE "BESTELLPOSTEN" (
         "POSTEN_ID"	INTEGER NOT NULL UNIQUE,
         "BESTELL_ID"	INTEGER NOT NULL,
         "PRODUKT_ID"	INTEGER NOT NULL,
@@ -89,7 +91,7 @@ def setup_database():
         ''')
     print('Table BESTELLPOSTEN created successfully!')
 
-    conn.execute('''CREATE TABLE "PRODUKTE" (
+    cursor.execute('''CREATE TABLE "PRODUKTE" (
         "PRODUKT_ID"	INTEGER NOT NULL UNIQUE,
         "PRODUKTBEZEICHNUNG"	TEXT NOT NULL,
         "PREIS"	REAL NOT NULL,
@@ -98,7 +100,7 @@ def setup_database():
         ''')
     print('Table PRODUKTE created successfully!')
 
-    conn.execute('''CREATE TABLE "AKKUTRAEGER" (
+    cursor.execute('''CREATE TABLE "AKKUTRAEGER" (
         "PRODUKT_ID"	INTEGER NOT NULL UNIQUE,
         "FUNKTIONSWEISE"	TEXT NOT NULL,
         "HOEHE"	REAL NOT NULL,
@@ -109,7 +111,7 @@ def setup_database():
         ''')
     print('Table AKKUTRAEGER created successfully!')
 
-    conn.execute('''CREATE TABLE "VERDAMPFER" (
+    cursor.execute('''CREATE TABLE "VERDAMPFER" (
         "PRODUKT_ID"	INTEGER NOT NULL UNIQUE,
         "DURCHMESSER"	REAL NOT NULL,
         "HOEHE"	REAL NOT NULL,
@@ -119,7 +121,7 @@ def setup_database():
         ''')
     print('Table VERDAMPFER created successfully!')
 
-    conn.execute('''CREATE TABLE "VERDAMPFERKOEPFE" (
+    cursor.execute('''CREATE TABLE "VERDAMPFERKOEPFE" (
         "PRODUKT_ID"	INTEGER NOT NULL UNIQUE,
         "DRAHTMATERIAL"	TEXT NOT NULL,
         "WIEDERSTAND"	REAL NOT NULL,
@@ -128,7 +130,7 @@ def setup_database():
         ''')
     print('Table VERDAMPFERKOEPFE created successfully!')
 
-    conn.execute('''CREATE TABLE "PASST_ZU" (
+    cursor.execute('''CREATE TABLE "PASST_ZU" (
         "PASSUNG_ID"	INTEGER NOT NULL UNIQUE,
         "VERDAMPFER_ID"	INTEGER NOT NULL,
         "VERDAMPFERKOPF_ID"	INTEGER NOT NULL,
@@ -138,7 +140,7 @@ def setup_database():
         ''')
     print('Table PASST_ZU created successfully!')
 
-    conn.execute('''CREATE TABLE "STARTER_SETS" (
+    cursor.execute('''CREATE TABLE "STARTER_SETS" (
         "PRODUKT_ID"	INTEGER NOT NULL UNIQUE,
         "AKKUTRAEGER"	INTEGER NOT NULL,
         "VERDAMPFER"	INTEGER NOT NULL,
@@ -151,7 +153,7 @@ def setup_database():
         ''')
     print('Table STARTER_SETS created successfully!')
 
-    conn.close()
+    cursor.close()
     print('Connection to DB closed')
 
 def add_admin():
