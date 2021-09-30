@@ -9,29 +9,38 @@ class Administrator(Benutzer):
         self.__personal_nummer = str(personal_nummer)
         self.__abteilung = str(abteilung)
 
+    def __get_product_by_id(self, produkt_id: str, tabelle: str, db_path: str):
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * from :tabelle WHERE PRODUKT_ID = :produkt_id",
+                       {'tabelle': tabelle, 'produkt_id': produkt_id})
+        produkt = cursor.fetchone()
+
+        return produkt
+
     def add_produkt(self, produkt: object, db_path: str):
         try:
-            produkt.save_to_db(db_path)
+            produkt.save_to_db(db_path, self)
         except AttributeError as exception:
             print(exception)
             print('Es steht keine passende Funktionalität zum speichern dieses Produktes zur Verfügung.')
 
-    def __add_kunde(benutzer_name, passwort, vorname, nachname):
+    def add_admin(self, benutzername: str, passwort: str, personalnummer: str, abteilung:str):
 
         conn = sqlite3.connect('../test_db.db')
+        cursor = conn.cursor()
 
-        # add Benutzer to DB
-        conn.execute(f"INSERT INTO BENUTZER(BENUTZERNAME,PASSWORT) VALUES('{benutzer_name}','{passwort}');")
+        #add to BENUTZER-TABLE:
+        cursor.execute("INSERT INTO BENUTZER (BENUTZERNAME, PASSWORT, IS_ADMIN, ISKUNDE, PERSONALNUMMER, ABTEILUNG) "
+                       "VALUES(:benutzername, :password, :is_admin, :is_kunde, :personalnummer, :abteilung)",
+                       {'benutzername': benutzername, 'passwort':passwort, 'is_admin':True, 'is_kunde': Flase,
+                        'personal_nummer': personalnummer, 'abteilung': abteilung})
+        print(f'{benutzername} wurde als administrator angelegt.')
         conn.commit()
-
-        # find benutzer_id
-        cursor = conn.execute(f"SELECT ID,BENUTZERNAME from BENUTZER")
-        for row in cursor:
-            if benutzer_name == row[1]:
-                benutzer_id = row[0]
-
-        # add Kunde to DB
-        conn.execute(f"INSERT INTO KUNDE(BENUTZER_ID,VORNAME,NACHNAME) VALUES({benutzer_id},'{vorname}','{nachname}');")
-        conn.commit()
-
         conn.close()
+
+    def add_set_by_id(self, akkutraeger_id: int, verdampfer_id: int, verdampferkopf_id: int, produktbezeichnung: str, preis: float, hersteller: str):
+        # todo: find way to create new sets from existing products.
+        pass

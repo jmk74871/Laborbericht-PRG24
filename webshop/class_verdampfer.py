@@ -15,8 +15,8 @@ class Verdampfer(Produkt):
         print(f'Verdampfer {self._produktbezeichnung} mit einem Durchmesser von {self.__durchmesser}mm und Höhe '
               f'von {self.__hoehe}mm.\n Preis:{self._preis}')
 
-    def save_to_db(self, db_path) -> None:
-        if self._save_to_prod_db(db_path):
+    def save_to_db(self, db_path, user: object) -> None:
+        if self._save_to_prod_db(db_path, user):
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
 

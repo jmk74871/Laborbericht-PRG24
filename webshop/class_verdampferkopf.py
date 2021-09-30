@@ -12,8 +12,8 @@ class Verdampferkopf(Produkt):
         print(f'Verdampferkopf {self.__prodoktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand '
               f'von {self.__wiederstand} Ohm. \nPreis:{self._preis}')
 
-    def save_to_db(self, db_path) -> None:
-        if self._save_to_prod_db(db_path):
+    def save_to_db(self, db_path, user: object) -> None:
+        if self._save_to_prod_db(db_path, user):
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
 
