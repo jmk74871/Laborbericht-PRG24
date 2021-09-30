@@ -13,4 +13,4 @@ class Starterset(Produkt):
         # for component in components:
         #     component.display_info()
 
-        print(f'Preis:{self.__preis}')
+        print(f'Preis:{self._preis}')

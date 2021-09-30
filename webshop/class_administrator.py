@@ -9,20 +9,12 @@ class Administrator(Benutzer):
         self.__personal_nummer = str(personal_nummer)
         self.__abteilung = str(abteilung)
 
-    def __add_product(self, produktbezeichnung, preis, hersteller):
-        conn = sqlite3.connect('../test_db.db')
-        cursor = conn.cursor()
-
-        # add to PRODUKT-DB
-        cursor.execute(f"INSERT INTO PRODUKTE(PRODUKTBEZEICHNUNG,PREIS, HERSTELLER) VALUES('{produktbezeichnung}','{preis}, {hersteller}');")
-        cursor.commit()
-
-        produkt_id = cursor.lastrowid()
-
-        conn.close()
-
-        return int(produkt_id)
-
+    def add_produkt(self, produkt: object, db_path: str):
+        try:
+            produkt.save_to_db(db_path)
+        except AttributeError as exception:
+            print(exception)
+            print('Es steht keine passende Funktionalität zum speichern dieses Produktes zur Verfügung.')
 
     def __add_kunde(benutzer_name, passwort, vorname, nachname):
 

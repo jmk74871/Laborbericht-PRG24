@@ -152,8 +152,8 @@ def setup_database():
         FOREIGN KEY("PRODUKT_ID") REFERENCES PRODUKTE(ID) ON DELETE CASCADE);
         ''')
     print('Table STARTER_SETS created successfully!')
-
-    cursor.close()
+    conn.commit()
+    conn.close()
     print('Connection to DB closed')
 
 def add_admin():
@@ -161,8 +161,9 @@ def add_admin():
     print('creating initial admin user')
 
     conn = sqlite3.connect('test_db.db')
+    cursor = conn.cursor()
 
-    conn.execute(f"INSERT INTO BENUTZER(BENUTZERNAME,PASSWORT,IS_ADMIN,IS_KUNDE,PERSONALNUMMER,ABTEILUNG) VALUES('admin','admin',True, False,'SHOPADMIN','IT');")
+    cursor.execute(f"INSERT INTO BENUTZER(BENUTZERNAME,PASSWORT,IS_ADMIN,IS_KUNDE,PERSONALNUMMER,ABTEILUNG) VALUES('admin','admin',True, False,'SHOPADMIN','IT');")
     conn.commit()
 
     # cursor = conn.execute(f"SELECT ID,BENUTZERNAME from BENUTZER")

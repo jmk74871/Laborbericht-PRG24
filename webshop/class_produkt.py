@@ -4,27 +4,28 @@ import sqlite3
 class Produkt():
 
     def __init__(self, produktbezeichnung: str, preis: float, hersteller: str, produkt_id: int = None):
-        self.__produktbezeichnung = str(produktbezeichnung)
-        self.__hersteller = str(hersteller)
-        self.__preis = float(preis)
+        self._produktbezeichnung = str(produktbezeichnung)
+        self._hersteller = str(hersteller)
+        self._preis = float(preis)
         if produkt_id is not None:
-            self.__produkt_id = int(produkt_id)
+            self._produkt_id = int(produkt_id)
         else:
-            self.__produkt_id = None
+            self._produkt_id = None
 
-    def save_to_db(self) -> int:
-        conn = sqlite3.connect('test_db.db')
+    def _save_to_prod_db(self, db_path) -> bool:
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
-        cursor.execute(f'INSERT INTO PRODUKTE(PRODUKTBEZEICHNUNG,PREIS, HERSTELLER) '
-                       f'VALUES(:produktbezeichnung,:preis, :hersteller);',
-                       {'produktbezeichnung': self.__produktbezeichnung,
-                        'preis': self.__preis,
-                        'hersteller': self.__hersteller})
+        # add to PRODUKT-DB
+        cursor.execute(
+            f"INSERT INTO PRODUKTE(PRODUKTBEZEICHNUNG,PREIS, HERSTELLER) VALUES(:produktbezeichnung,:preis,:hersteller);",
+            {'produktbezeichnung': self._produktbezeichnung, 'preis': self._preis, 'hersteller': self._hersteller})
         conn.commit()
 
-        self.__produkt_id = int(cursor.lastrowid)
+        self._produkt_id = int(cursor.lastrowid)
 
         conn.close()
 
-        return int(self.__produkt_id)
+        # todo: catch except and return False
+
+        return True
