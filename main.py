@@ -6,8 +6,7 @@ from setup_script import run_setup
 def test_script():
     mf = Mainframe()
     mf.einloggen('admin', 'admin')
-    prod = webshop.class_verdampfer.Verdampfer('Verdampfer123', 1.02, 'VaperG', 2.4, 3, 'top fill')
-    mf.user.add_produkt(prod, mf.db_path)
+    mf.user.add_verdampfer('Verdampfer247', 1.52, 'VaperG', 2.8, 2.74, 'top fill', mf.db_path)
 
 
 

@@ -12,21 +12,6 @@ class Verdampferkopf(Produkt):
         print(f'Verdampferkopf {self.__prodoktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand '
               f'von {self.__wiederstand} Ohm. \nPreis:{self._preis}')
 
-    def save_to_db(self, db_path, user: object) -> None:
-        if self._save_to_prod_db(db_path, user):
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-
-            # add to VERDAMPFERKOEPFE-DB
-            cursor.execute(
-                f"INSERT INTO VERDAMPFERKOEFE(PRODUKT_ID, DRAHTMATERIAL, WIEDERSTAND) VALUES(:produkt_id, :drahtmaterial, :wiederstand);",
-                {'produkt_id': self._produkt_id, 'drahtmaterial': self.__drahtmaterial, 'wiederstand': self.__wiederstand})
-            conn.commit()
-
-            print(f'{self._produktbezeichnung} saved to db  with id: {self._produkt_id}')
-        else:
-            print('insertion to db failed!')
-
     def display_matching(self):
         # todo: method to display matching verdampfer.
         print('Passende Verdampfer zu diesem Verdampferkopf sind:\n')
