@@ -3,17 +3,35 @@ import sqlite3
 
 
 class Administrator(Benutzer):
-    def __init__(self, benutzer_name: str, passwort: str, personal_nummer: str = 'none', abteilung: str = 'none',
-                 benutzer_id: int = None):
-        super().__init__(benutzer_name, passwort, benutzer_id)
-        self.__personal_nummer = str(personal_nummer)
-        self.__abteilung = str(abteilung)
+    def __init__(self, benutzer_name: str, passwort: str):
+        super().__init__(benutzer_name, passwort)
+        self.__personal_nummer = None
+        self.__abteilung = None
+        self.__einloggen()
+
+    def __einloggen(self):
+        if self._benutzer_einloggen():
+            conn = sqlite3.connect(self._db_path)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT * from BENUTZER WHERE BENUTZER_ID = :benutzer_id",
+                           {"benutzer_id": self._benutzer_id})
+
+            res = cursor.fetchall()
+
+            if len(res) == 1 and bool(res[0]['IS_ADMIN']):
+                ds = res[0]
+                self.__personal_nummer = ds['PERSONALNUMMER']
+                self.__abteilung = ds['ABTEILUNG']
+                self._login_status = True
+            else:
+                print('Login fehlgeschlagen! Bitte benutze das Anmeldeportal für Kunden!')
 
 
-
-    def __save_to_prod_db(self, produktbezeichnung: str, preis: float, hersteller: str, db_path: str) -> int:
+    def __save_to_prod_db(self, produktbezeichnung: str, preis: float, hersteller: str) -> int:
         try:
-            conn = sqlite3.connect(db_path)
+            conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
             # add to PRODUKT-DB
@@ -33,13 +51,13 @@ class Administrator(Benutzer):
         return produkt_id
 
     def add_verdampfer(self, produktbezeichnung: str, preis: float, hersteller: str, durchmesser: float, hoehe: float,
-                       fuellsystem: str, db_path: str) -> None:
+                       fuellsystem: str) -> None:
 
         # write to product table and get produkt_id:
-        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller, db_path)
+        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
         if produkt_id is not None:
-            conn = sqlite3.connect(db_path)
+            conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
             # add to VERDAMPFER-DB
@@ -54,12 +72,12 @@ class Administrator(Benutzer):
             print('Insertion to db failed!')
 
     def add_verdampferkopf(self, produktbezeichnung: str, preis: float, hersteller: str, drahtmaterial: str,
-                           wiederstand: float, db_path: str) -> None:
+                           wiederstand: float) -> None:
         # write to product table and get produkt_id:
-        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller, db_path)
+        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
         if produkt_id is not None:
-            conn = sqlite3.connect(db_path)
+            conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
             # add to VERDAMPFERKOEPFE-DB
@@ -77,10 +95,10 @@ class Administrator(Benutzer):
     def add_akkutaeger(self, produktbezeichnung: str, preis: float, hersteller: str, funktionsweise: str, hoehe: float,
                        breite: float, akkutyp: str, db_path: str) -> None:
         # write to product table and get produkt_id:
-        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller, db_path)
+        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
         if produkt_id is not None:
-            conn = sqlite3.connect(db_path)
+            conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
             # add to AKKUTRAEGER-DB
@@ -98,10 +116,10 @@ class Administrator(Benutzer):
     def add_set(self, produktbezeichnung: str, preis: float, hersteller: str, akkutraeger_id: int, verdampfer_id: int,
                 verdampferkopf_id: int, db_path: str) -> None:
         # write to product table and get produkt_id:
-        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller, db_path)
+        produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
         if produkt_id is not None:
-            conn = sqlite3.connect(db_path)
+            conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
             # add to AKKUTRAEGER-DB
@@ -118,7 +136,7 @@ class Administrator(Benutzer):
 
     def add_admin(self, benutzername: str, passwort: str, personalnummer: str, abteilung: str) -> None:
 
-        conn = sqlite3.connect('../test_db.db')
+        conn = sqlite3.connect(self._db_path)
         cursor = conn.cursor()
 
         # add to BENUTZER-TABLE:

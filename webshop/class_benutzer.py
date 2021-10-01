@@ -2,32 +2,53 @@ import sqlite3
 
 
 class Benutzer():
-    def __init__(self, benutzername: str, passwort: str, benutzer_id: int = None):
-        if benutzer_id is not None:
-            self.__benutzer_id = int(benutzer_id)
-        else:
-            self.__benutzer_id = None
-        self.__benutzername = str(benutzername)
-        self.__passwort = str(passwort)
-        self.__db_path = 'test_db.db'
+    def __init__(self, benutzername: str, passwort: str):
 
-    # def _einloggen(self) -> object:
-    #
-    #     conn = sqlite3.connect(self.__db_path)
-    #     conn.row_factory = sqlite3.Row
-    #     cursor = conn.cursor()
-    #
-    #     cursor.execute("SELECT * from BENUTZER WHERE BENUTZERNAME = :name AND PASSWORT = :pw", {"name": self.__benutzername, "pw": self.__passwort})
-    #
-    #     res = cursor.fetchall()
-    #
-    #     if len(res) == 1:
-    #         ds = res[0]
-    #         if bool(ds['IS_ADMIN']) and self.__class__:
-    #             user = Administrator(benutzer_id=ds['BENUTZER_ID'], benutzer_name=ds['BENUTZERNAME'], passwort=ds['PASSWORT'], personal_nummer=ds['PERSONALNUMMER'], abteilung=ds['ABTEILUNG'])
-    #         elif bool(ds['IS_KUNDE']):
-    #             user = Kunde(benutzer_id=ds['BENUTZER_ID'], benutzer_name=ds['BENUTZERNAME'], passwort=ds['PASSWORT'], vorname=ds['VORNAME'], nachname=ds['NACHNAME'])
-    #         return user
-    #     else:
-    #         print('Login fehlgeschlagen!')
-    #         return self
+        self._benutzername = str(benutzername)
+        self.__passwort = str(passwort)
+
+        self._db_path = 'test_db.db'
+        self._login_status = False
+        self._benutzer_id = None
+
+
+    def _benutzer_einloggen(self) -> bool:
+        conn = sqlite3.connect(self._db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * from BENUTZER WHERE BENUTZERNAME = :name AND PASSWORT = :pw",
+                       {"name": self._benutzername, "pw": self.__passwort})
+
+        res = cursor.fetchall()
+
+        if len(res) == 1:
+            ds = res[0]
+            self._benutzer_id = ds['BENUTZER_ID']
+            return True
+        else:
+            print('Login fehlgeschlagen! Bitte lege ein passendes Benutzerkonto an.')
+            return False
+
+    def _check_verfuegbar_benutzername(self, name_to_check: str) -> bool:
+        conn = sqlite3.connect(self._db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * from BENUTZER WHERE BENUTZERNAME = :name", {"name": name_to_check})
+        res = cursor.fetchall()
+
+        if len(res) == 0:
+            conn.close()
+            return True
+        else:
+            conn.close()
+            return False
+
+
+#     if bool(ds['IS_ADMIN']) and isinstance(self, Administrator):
+#         user = Administrator(benutzer_id=ds['BENUTZER_ID'], benutzer_name=ds['BENUTZERNAME'], passwort=ds['PASSWORT'], personal_nummer=ds['PERSONALNUMMER'], abteilung=ds['ABTEILUNG'])
+#     elif bool(ds['IS_KUNDE']):
+#         user = Kunde(benutzer_id=ds['BENUTZER_ID'], benutzer_name=ds['BENUTZERNAME'], passwort=ds['PASSWORT'], vorname=ds['VORNAME'], nachname=ds['NACHNAME'])
+# else:
+#     print('Login fehlgeschlagen!')
