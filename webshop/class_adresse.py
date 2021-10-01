@@ -2,7 +2,7 @@ import os
 
 class Adresse():
 
-    def __init__(self, adress_id, strasse, hausnummer, plz, stadt, ):
+    def __init__(self, adress_id: int, strasse: str, hausnummer: int, plz: str, stadt: str):
         self.__adress_id = int(adress_id)
         self.__strasse = str(strasse)
         self.__hausnummer = int(hausnummer)
@@ -25,12 +25,6 @@ class Adresse():
     def display_adresse(self):
         print(f'{self.__strasse} {self.__hausnummer} \n {self.__plz} {self.__stadt}')
 
-    def get_id(self):
-        return self.__adress_id
-
-    def save_to_db(self):
-        # ToDO: create method to save to db
-        return True
 
 
 

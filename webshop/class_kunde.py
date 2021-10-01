@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, datetime
 from webshop.class_adresse import Adresse
 from webshop.class_bankverbindung import Bankverbindung
 from webshop.class_benutzer import Benutzer
@@ -10,11 +10,63 @@ class Kunde(Benutzer):
         super().__init__(benutzer_name, passwort)
         self.__vorname = None
         self.__nachname = None
-        self.__adresse = []
-        self.__bankverbindung = []
-        self.__bestellungen = []
+        self.__adressen = []
+        self.__bankverbindungen = []
+        self.__warenkorb = self.__neuer_warenkorb()
+        self.__bestellhistorie = []
 
         self.__einloggen()
+
+        if self._login_status:
+            self.__get_adressen_from_db()
+            self.__get_bankinfo_from_db()
+            self.__get_bestellungen_from_db()
+
+    # Öffentliche Schnittstellen:
+
+    def add_adresse(self, strasse: str, hausnummer: int, plz: str, stadt: str):
+        if self._login_status:
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+
+            # add to ADRESS-DB
+            cursor.execute(
+                f"INSERT INTO ADRESSEN (BENUTZER_ID, STRASSE, HAUSNUMMER, PLZ, STADT)"
+                f"VALUES(:benutzer_id, :strasse, :hausnummer, :plz, :stadt);",
+                {'benutzer_id': self._benutzer_id, 'strasse': strasse, 'hausnummer': hausnummer,
+                 'plz': plz, 'stadt': stadt})
+            conn.commit()
+
+            print(f'Adresse in der {strasse} {hausnummer} in {stadt} erfolgreich angelegt.')
+
+            self.__get_adressen_from_db()
+
+        else:
+            print('Bitte zuerst anmelden.')
+
+    def add_bankverbindung(self, kontoinhaber: str, iban: str, bic: str):
+        if self._login_status:
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+
+            # add to ADRESS-DB
+            cursor.execute(
+                f"INSERT INTO BANKVERBINDUNGEN (BENUTZER_ID, KONTOINHABER, IBAN, BIC)"
+                f"VALUES(:benutzer_id, :kontoinhaber, :iban, :bic);",
+                {'benutzer_id': self._benutzer_id, 'kontoinhaber': kontoinhaber, 'iban': iban, 'bic': bic})
+            conn.commit()
+
+            print(f'Bankverbindung mit der IBAN endend auf {iban[-4:]} erfolgreich angelegt.')
+
+            self.__get_bankinfo_from_db()
+
+        else:
+            print('Bitte zuerst anmelden.')
+
+    def add_product_to_chart(self, produkt_id: int, menge: int):
+        self.__warenkorb.add_bestellposten(produkt_id, menge)
+
+    # Interne Methoden:
 
     def __einloggen(self):
         if self._benutzer_einloggen():
@@ -36,9 +88,9 @@ class Kunde(Benutzer):
             else:
                 print('Login fehlgeschlagen! Bitte stellen SIe sicher, dass Sie das richtige Anmeldeportal verwenden.')
         else:
-            self.create_new_account()
+            self.__create_new_account()
 
-    def create_new_account(self) -> None:
+    def __create_new_account(self) -> None:
 
         new_account = input('Möchten Sie ein neues Kundenkonto anlegen? (ja/nein)')
         if new_account == 'ja':
@@ -61,7 +113,7 @@ class Kunde(Benutzer):
             # add to BENUTZER-TABLE:
             cursor.execute("INSERT INTO BENUTZER (BENUTZERNAME, PASSWORT, IS_ADMIN, IS_KUNDE, VORNAME, NACHNAME) "
                            "VALUES(:benutzername, :passwort, :is_admin, :is_kunde, :vorname, :nachname)",
-                           {'benutzername': benutzername, 'passwort': passwort, 'is_admin': False, 'is_kunde': True,
+                           {'benutzername': self.__benutzername, 'passwort': self.__passwort, 'is_admin': False, 'is_kunde': True,
                             'vorname': vorname, 'nachname': nachname})
             print(f'{vorname} {nachname} wurde als Kunde mit dem Benutzernamen {self._benutzername} angelegt.')
 
@@ -70,32 +122,61 @@ class Kunde(Benutzer):
 
             self.__einloggen()
 
-    def add_adresse(self, strasse: str, hausnummer: int, plz: str, stadt: str):
-        new_adress = Adresse(strasse, hausnummer, plz, stadt)
-        if new_adress.save_to_db():
-            self.__adresse.append(new_adress.get_id())
-        pass
+    def __get_adressen_from_db(self):
 
-    def add_bankverbindung(self, kontoinhaber, iban, bic):
-        new_bank_info = Bankverbindung(kontoinhaber, iban, bic)
-        if new_bank_info.save_to_db():
-            self.__bankverbindung.append(new_bank_info.get_id())
+        self.__adressen = []
 
-    def __get_adresses_from_db(self):
-
-        conn = sqlite3.connect(self.__db_path)
-
+        conn = sqlite3.connect(self._db_path)
+        conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        cursor.execute(f"SELECT from ADRESSEN WHERE BENUTZER_ID == {self.__benutzer_id}")
-        for row in cursor:
-            self.__adresse.append(Adresse(row[0], row[1], row[3], row[4], row[5]))
 
+        cursor.execute("SELECT * from ADRESSEN WHERE BENUTZER_ID = :benutzer_id;", {'benutzer_id': self._benutzer_id,})
+
+        res = cursor.fetchall()
         conn.close()
 
+        for ds in res:
+            adresse = Adresse(ds['ADRESS_ID'], ds['STRASSE'], ds['HAUSNUMMER'], ds['PLZ'], ds['STADT'])
+            self.__adressen.append(adresse)
+
     def __get_bankinfo_from_db(self):
-        # todo: implement method to get adresses from db.
-        pass
+        self.__bankverbindungen = []
+
+        conn = sqlite3.connect(self._db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * from BANKVERBINDUNGEN WHERE BENUTZER_ID = :benutzer_id;", {'benutzer_id': self._benutzer_id, })
+
+        res = cursor.fetchall()
+        conn.close()
+
+        for ds in res:
+            bankverbindung = Bankverbindung(ds['BANK_ID'], ds['KONTOINHABER'], ds['IBAN'], ds['BIC'])
+            self.__bankverbindungen.append(bankverbindung)
+
 
     def __get_bestellungen_from_db(self):
-        # todo: implement method to get adresses from db.
-        pass
+        self.__bestellhistorie = []
+
+        conn = sqlite3.connect(self._db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * from BESTELLUNGEN WHERE BENUTZER_ID = :benutzer_id;",
+                       {'benutzer_id': self._benutzer_id})
+
+        res = cursor.fetchall()
+        conn.close()
+
+        for ds in res:
+            bestellung = Bestellung(db_path=self._db_path, bestell_id=ds['BESTELL_ID'],
+                                    bestelldatum=ds['BESTELLDATUM'], bestellstatus=ds['STATUS'])
+            self.__bestellhistorie.append(bestellung)
+
+
+    def __neuer_warenkorb(self):
+        # todo: methode wirklich nötig?
+        bestellung = Bestellung(db_path=self._db_path)
+        return bestellung
+
