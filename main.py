@@ -20,6 +20,7 @@ def test_user_loging_in():
     user = webshop.class_kunde.Kunde('PeterV', 'pass234', warenhaus)
     # user.add_adresse('Stuttgarter Str.', 3, '74700', 'Stuttgart')
     user.zum_warenkorb_hinzufuegen(1, 1)
+    user.zum_warenkorb_hinzufuegen(7, 1)
     user.zum_warenkorb_hinzufuegen(4, 1)
     user.zum_warenkorb_hinzufuegen(11, 2)
     user.zum_warenkorb_hinzufuegen(10, 2)

@@ -8,7 +8,7 @@ class Verdampferkopf(Produkt):
         self.__drahtmaterial = str(drahtmaterial)
         self.__wiederstand = float(wiederstand)
 
-    def display_info(self):
+    def get_info(self):
         return f'Verdampferkopf {self._produktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand ' \
                f'von {self.__wiederstand} Ohm. \nPreis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
 

@@ -32,7 +32,7 @@ class Bestellung():
         returnstring += '\nIhr aktueller Warenkorb enthält:'
         gesamtpreis = 0
         for bestellposten in self.__bestellposten:
-            returnstring += bestellposten.display_info()
+            returnstring += bestellposten.get_info()
             gesamtpreis += bestellposten.get_total()
 
         returnstring += f'\n\nDer Gesamtpreis aller Produkte im aktuellen Warenkorbes beträgt: {gesamtpreis:.2f}€'

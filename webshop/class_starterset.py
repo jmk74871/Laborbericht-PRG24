@@ -7,7 +7,7 @@ class Starterset(Produkt):
         super().__init__(produkt_id, produktbezeichnung, preis, hersteller)
         # toDO: load/create objects for the components on creation.
 
-    def display_info(self):
+    def get_info(self):
         print(f'Das Set {self.__prodoktbezeichnung} enthält:\n')
 
         # for component in components:

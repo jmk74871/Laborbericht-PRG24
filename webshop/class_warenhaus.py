@@ -32,17 +32,17 @@ class Warenhaus():
         if self.__chek_if_update_needed():
             if all:
                 for product in self.__katalog.values():
-                    print(product.display_info())
+                    print(product.get_info())
             else:
                 for product in self.__katalog.values():
                     if verdampfer and isinstance(product, Verdampfer):
-                        print(product.display_info())
+                        print(product.get_info())
                     elif verdampferkoepfe and isinstance(product, Verdampferkopf):
-                        print(product.display_info())
+                        print(product.get_info())
                     elif akkutraeger and isinstance(product, Akkutraeger):
-                        print(product.display_info())
+                        print(product.get_info())
                     elif startersets and isinstance(product, Starterset):
-                        print(product.display_info())
+                        print(product.get_info())
 
     # interne Methoden
 

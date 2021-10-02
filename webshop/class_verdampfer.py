@@ -10,6 +10,6 @@ class Verdampfer(Produkt):
         self.__durchmesser = float(durchmesser)
         self.__fuellsystem = str(fuellsystem)
 
-    def display_info(self):
+    def get_info(self):
         return f'Verdampfer {self._produktbezeichnung} mit einem Durchmesser von {self.__durchmesser}mm und Höhe ' \
                f'von {self.__hoehe}mm.\n Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
