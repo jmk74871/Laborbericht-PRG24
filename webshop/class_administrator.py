@@ -82,7 +82,7 @@ class Administrator(Benutzer):
 
             # add to VERDAMPFERKOEPFE-DB
             cursor.execute(
-                f"INSERT INTO VERDAMPFERKOEFE(PRODUKT_ID, DRAHTMATERIAL, WIEDERSTAND) "
+                f"INSERT INTO VERDAMPFERKOEPFE(PRODUKT_ID, DRAHTMATERIAL, WIEDERSTAND) "
                 f"VALUES(:produkt_id, :drahtmaterial, :wiederstand);",
                 {'produkt_id': produkt_id, 'drahtmaterial': drahtmaterial,
                  'wiederstand': wiederstand})
@@ -93,7 +93,7 @@ class Administrator(Benutzer):
             print('Insertion to db failed!')
 
     def add_akkutaeger(self, produktbezeichnung: str, preis: float, hersteller: str, funktionsweise: str, hoehe: float,
-                       breite: float, akkutyp: str, db_path: str) -> None:
+                       breite: float, akkutyp: str) -> None:
         # write to product table and get produkt_id:
         produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
@@ -114,7 +114,7 @@ class Administrator(Benutzer):
             print('Insertion to db failed!')
 
     def add_set(self, produktbezeichnung: str, preis: float, hersteller: str, akkutraeger_id: int, verdampfer_id: int,
-                verdampferkopf_id: int, db_path: str) -> None:
+                verdampferkopf_id: int) -> None:
         # write to product table and get produkt_id:
         produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 

@@ -38,6 +38,7 @@ class Bestellung():
     # interne Methoden
 
     def __load_from_db(self):
+        # todo: is this method needed?
         conn = sqlite3.connect(self._db_path)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()

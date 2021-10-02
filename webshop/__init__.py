@@ -10,3 +10,4 @@ from . import class_kunde
 from . import class_starterset
 from . import class_verdampfer
 from . import class_verdampferkopf
+from. import class_warenhaus

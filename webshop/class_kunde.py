@@ -64,7 +64,7 @@ class Kunde(Benutzer):
             print('Bitte zuerst anmelden.')
 
     def add_product_to_chart(self, produkt_id: int, menge: int):
-        self.__warenkorb.add_bestellposten(produkt_id, menge)
+        self.__warenkorb._add_bestellposten(produkt_id, menge)
 
     # Interne Methoden:
 
