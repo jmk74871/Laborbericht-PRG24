@@ -1,4 +1,5 @@
-import sqlite3, datetime
+import sqlite3
+
 from webshop.class_adresse import Adresse
 from webshop.class_bankverbindung import Bankverbindung
 from webshop.class_benutzer import Benutzer
@@ -7,7 +8,7 @@ from webshop.class_warenhaus import Warenhaus
 
 
 class Kunde(Benutzer):
-    def __init__(self, benutzer_name: str, passwort: str, warenhaus: Warenhaus) -> object:
+    def __init__(self, benutzer_name: str, passwort: str, warenhaus: Warenhaus) -> None:
         super().__init__(benutzer_name, passwort)
         self.__warenhaus = warenhaus
         self.__vorname = None
@@ -71,8 +72,6 @@ class Kunde(Benutzer):
     def warenkorb_anzeigen(self) -> None:
         print(self.__warenkorb._warenkorb_anzeigen())
 
-
-
     # Interne Methoden:
 
     def __einloggen(self):
@@ -120,7 +119,8 @@ class Kunde(Benutzer):
             # add to BENUTZER-TABLE:
             cursor.execute("INSERT INTO BENUTZER (BENUTZERNAME, PASSWORT, IS_ADMIN, IS_KUNDE, VORNAME, NACHNAME) "
                            "VALUES(:benutzername, :passwort, :is_admin, :is_kunde, :vorname, :nachname)",
-                           {'benutzername': self.__benutzername, 'passwort': self.__passwort, 'is_admin': False, 'is_kunde': True,
+                           {'benutzername': self.__benutzername, 'passwort': self.__passwort, 'is_admin': False,
+                            'is_kunde': True,
                             'vorname': vorname, 'nachname': nachname})
             print(f'{vorname} {nachname} wurde als Kunde mit dem Benutzernamen {self._benutzername} angelegt.')
 
@@ -137,7 +137,7 @@ class Kunde(Benutzer):
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * from ADRESSEN WHERE BENUTZER_ID = :benutzer_id;", {'benutzer_id': self._benutzer_id,})
+        cursor.execute("SELECT * from ADRESSEN WHERE BENUTZER_ID = :benutzer_id;", {'benutzer_id': self._benutzer_id, })
 
         res = cursor.fetchall()
         conn.close()
@@ -153,7 +153,8 @@ class Kunde(Benutzer):
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * from BANKVERBINDUNGEN WHERE BENUTZER_ID = :benutzer_id;", {'benutzer_id': self._benutzer_id, })
+        cursor.execute("SELECT * from BANKVERBINDUNGEN WHERE BENUTZER_ID = :benutzer_id;",
+                       {'benutzer_id': self._benutzer_id, })
 
         res = cursor.fetchall()
         conn.close()
@@ -177,11 +178,11 @@ class Kunde(Benutzer):
 
         for ds in res:
             bestellung = Bestellung(db_path=self._db_path, bestell_id=ds['BESTELL_ID'],
-                                    bestelldatum=ds['BESTELLDATUM'], bestellstatus=ds['STATUS'], warenhaus=self.__warenhaus)
+                                    bestelldatum=ds['BESTELLDATUM'], bestellstatus=ds['STATUS'],
+                                    warenhaus=self.__warenhaus)
             self.__bestellhistorie.append(bestellung)
 
     def __neuer_warenkorb(self):
         # todo: methode wirklich nötig?
         bestellung = Bestellung(db_path=self._db_path, warenhaus=self.__warenhaus)
         return bestellung
-
