@@ -43,8 +43,6 @@ class Kunde(Benutzer):
             print(f'Adresse in der {strasse} {hausnummer} in {stadt} erfolgreich angelegt.')
 
             self.__get_adressen_from_db()
-
-
         else:
             self.__einloggen()
 
@@ -59,7 +57,7 @@ class Kunde(Benutzer):
 
     def delete_adresse(self, adress_id: int):
         if self._login_status:
-            conn = sqlite3.connect(self.__db_path)
+            conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
             cursor.execute('DELETE from ADRESSEN WHERE ADRESS_ID = :adress_id',
                            {'adress_id': adress_id})
@@ -97,7 +95,7 @@ class Kunde(Benutzer):
 
     def delete_bankverbindungen(self, bank_id: int):
         if self._login_status:
-            conn = sqlite3.connect(self.__db_path)
+            conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
             cursor.execute('DELETE from BANKVERBINDUNGEN WHERE BANK_ID = :bank_id AND BENUTZER_ID = :benutzer_id',
                            {'bank_id': bank_id, 'benutzer_id': self._benutzer_id})
@@ -120,6 +118,35 @@ class Kunde(Benutzer):
             self.__warenkorb._save_to_db(self._benutzer_id, adress_id, bank_id)
 
             self.__warenkorb = self.__neuer_warenkorb()
+        else:
+            self.__einloggen()
+
+    def show_kundendaten(self):
+        print(f'Ihre Daten lauten: \nVorname: {self.__vorname}\nNachname:{self.__nachname}.'
+              f'\nIhr Benutzername lautet {self.__benutzername}.')
+
+    def update_kundendaten(self, vorname=None, nachname=None):
+        if self._login_status:
+            if vorname is None:
+                vorname = self.__vorname
+            if nachname is None:
+                nachname = self.__nachname
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+            cursor.execute(
+                'UPDATE BENUTZER SET VORNAME = :vorname, NACHNAME = :nachname WHERE BENUTZER_ID = :benutzer_id;',
+                {'vorname': vorname, 'nachname': nachname, 'benutzer_id': self._benutzer_id})
+        else:
+            self.__einloggen()
+
+    def delete_kundendaten(self):
+        if self._login_status:
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+            cursor.execute('DELETE from BENUTZER WHERE BENUTZER_ID = :benutzer_id',
+                           {'benutzer_id': self._benutzer_id})
+            conn.commit()
+            conn.close()
         else:
             self.__einloggen()
 
@@ -234,5 +261,4 @@ class Kunde(Benutzer):
             self.__bestellhistorie.append(bestellung)
 
     def __neuer_warenkorb(self):
-        bestellung = Bestellung(db_path=self._db_path, warenhaus=self.__warenhaus)
-        return bestellung
+        return Bestellung(db_path=self._db_path, warenhaus=self.__warenhaus)
