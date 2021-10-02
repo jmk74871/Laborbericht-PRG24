@@ -44,7 +44,6 @@ class Bestellung():
         self.__bestellposten = [posten for posten in self.__bestellposten if posten.get_produkt_id() != produkt_id]
 
     def _save_to_db(self, benutzer_id: int, adress_id: int, bank_id: int):
-        # todo: create method to save to db after order is placed
         conn = sqlite3.connect(self.__db_path)
         cursor = conn.cursor()
 

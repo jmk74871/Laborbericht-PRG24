@@ -23,7 +23,6 @@ class Bestellposten():
         return self.__produkt_id
 
     def _save_to_db(self, bestell_id: int):
-        # todo: create method to save to db after order is placed
         conn = sqlite3.connect(self.__db_path)
         cursor = conn.cursor()
 

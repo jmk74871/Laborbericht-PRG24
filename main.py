@@ -2,6 +2,8 @@ import os.path
 import webshop
 from setup_script import run_setup
 
+# todo: finish/revisit testcases
+
 def test_admin_creating_products():
     user = webshop.class_administrator.Administrator('admin', 'admin')
 
