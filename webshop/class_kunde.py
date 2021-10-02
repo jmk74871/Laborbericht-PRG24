@@ -69,7 +69,7 @@ class Kunde(Benutzer):
         self.__warenkorb._add_bestellposten(produkt_id, menge)
 
     def warenkorb_anzeigen(self) -> None:
-        print(self.__warenkorb._display_warenkorb())
+        print(self.__warenkorb._warenkorb_anzeigen())
 
 
 

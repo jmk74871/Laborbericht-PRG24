@@ -27,7 +27,7 @@ class Bestellung():
         else:
             print(f'Das Produkt mit der ID {produkt_id} konnte nicht im Produktkatalog gefunden werden.')
 
-    def _display_warenkorb(self) -> str:
+    def _warenkorb_anzeigen(self) -> str:
         returnstring = ''
         returnstring += '\nIhr aktueller Warenkorb enthält:'
         gesamtpreis = 0
