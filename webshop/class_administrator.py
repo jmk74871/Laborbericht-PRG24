@@ -44,11 +44,13 @@ class Administrator(Benutzer):
             produkt_id = int(cursor.lastrowid)
             conn.close()
 
-        except SQLiteException as eception:
-            print(eception)
-            return None
+            return produkt_id
 
-        return produkt_id
+        except Exception as e:
+            print(e)
+            return 0
+
+
 
     def add_verdampfer(self, produktbezeichnung: str, preis: float, hersteller: str, durchmesser: float, hoehe: float,
                        fuellsystem: str) -> None:
@@ -56,7 +58,7 @@ class Administrator(Benutzer):
         # write to product table and get produkt_id:
         produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
-        if produkt_id is not None:
+        if produkt_id > 0:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
@@ -76,7 +78,7 @@ class Administrator(Benutzer):
         # write to product table and get produkt_id:
         produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
-        if produkt_id is not None:
+        if produkt_id > 0:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
@@ -97,7 +99,7 @@ class Administrator(Benutzer):
         # write to product table and get produkt_id:
         produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
-        if produkt_id is not None:
+        if produkt_id > 0:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
@@ -118,16 +120,15 @@ class Administrator(Benutzer):
         # write to product table and get produkt_id:
         produkt_id = self.__save_to_prod_db(produktbezeichnung, preis, hersteller)
 
-        if produkt_id is not None:
+        if produkt_id > 0:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
 
             # add to AKKUTRAEGER-DB
-            cursor.execute(
-                f"INSERT INTO STARTER_SETS(PRODUKT_ID, AKKUTRAEGER, VERDAMPFER, VERDAMPFERKOPF) "
-                f"VALUES(:produkt_id, :akkutaeger_id, :verdampfer_id, :verdampferkopf_id);",
-                {'produkt_id': produkt_id, 'akkutraeger_id': akkutraeger_id, 'verdampfer_id': verdampfer_id,
-                 'verdampferkopf_id': verdampferkopf_id})
+            cursor.execute(f"INSERT INTO STARTER_SETS(PRODUKT_ID, AKKUTRAEGER, VERDAMPFER, VERDAMPFERKOPF) "
+                           f"VALUES(:produkt_id, :akkutaeger_id, :verdampfer_id, :verdampferkopf_id);",
+                           {'produkt_id': produkt_id, 'akkutaeger_id': akkutraeger_id, 'verdampfer_id': verdampfer_id,
+                            'verdampferkopf_id': verdampferkopf_id})
             conn.commit()
 
             print(f'{produktbezeichnung} saved to db  with id: {produkt_id}')
@@ -140,7 +141,7 @@ class Administrator(Benutzer):
         cursor = conn.cursor()
 
         # add to BENUTZER-TABLE:
-        cursor.execute("INSERT INTO BENUTZER (BENUTZERNAME, PASSWORT, IS_ADMIN, ISKUNDE, PERSONALNUMMER, ABTEILUNG) "
+        cursor.execute("INSERT INTO BENUTZER (BENUTZERNAME, PASSWORT, IS_ADMIN, IS_KUNDE, PERSONALNUMMER, ABTEILUNG) "
                        "VALUES(:benutzername, :password, :is_admin, :is_kunde, :personalnummer, :abteilung)",
                        {'benutzername': benutzername, 'passwort': passwort, 'is_admin': True, 'is_kunde': False,
                         'personal_nummer': personalnummer, 'abteilung': abteilung})

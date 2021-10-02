@@ -10,7 +10,7 @@ class Verdampferkopf(Produkt):
 
     def get_info(self):
         return f'Verdampferkopf {self._produktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand ' \
-               f'von {self.__wiederstand} Ohm. \nPreis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
+               f'von {self.__wiederstand} Ohm. \n   Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
 
     def display_matching(self):
         # todo: method to display matching verdampfer.

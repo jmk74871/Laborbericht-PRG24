@@ -44,8 +44,29 @@ class Kunde(Benutzer):
 
             self.__get_adressen_from_db()
 
+
         else:
-            print('Bitte zuerst anmelden.')
+            self.__einloggen()
+
+    def show_adressen(self):
+        if self._login_status:
+            displaystring = ''
+            for adresse in self.__adressen:
+                displaystring += adresse.get_adressinfo()
+            print(displaystring)
+        else:
+            self.__einloggen()
+
+    def delete_adresse(self, adress_id: int):
+        if self._login_status:
+            conn = sqlite3.connect(self.__db_path)
+            cursor = conn.cursor()
+            cursor.execute('DELETE from ADRESSEN WHERE ADRESS_ID = :adress_id',
+                           {'adress_id': adress_id})
+            conn.commit()
+            conn.close()
+        else:
+            self.__einloggen()
 
     def add_bankverbindung(self, kontoinhaber: str, iban: str, bic: str):
         if self._login_status:
@@ -62,15 +83,45 @@ class Kunde(Benutzer):
             print(f'Bankverbindung mit der IBAN endend auf {iban[-4:]} erfolgreich angelegt.')
 
             self.__get_bankinfo_from_db()
-
         else:
-            print('Bitte zuerst anmelden.')
+            self.__einloggen()
 
-    def zum_warenkorb_hinzufuegen(self, produkt_id: int, menge: int):
-        self.__warenkorb._add_bestellposten(produkt_id, menge)
+    def show_bankverbindungen(self):
+        if self._login_status:
+            displaystring = ''
+            for bankverbindung in self.__bankverbindungen:
+                displaystring += bankverbindung.get_bankinfo()
+            print(displaystring)
+        else:
+            self.__einloggen()
 
-    def warenkorb_anzeigen(self) -> None:
-        print(self.__warenkorb._warenkorb_anzeigen())
+    def delete_bankverbindungen(self, bank_id: int):
+        if self._login_status:
+            conn = sqlite3.connect(self.__db_path)
+            cursor = conn.cursor()
+            cursor.execute('DELETE from BANKVERBINDUNGEN WHERE BANK_ID = :bank_id AND BENUTZER_ID = :benutzer_id',
+                           {'bank_id': bank_id, 'benutzer_id': self._benutzer_id})
+            conn.commit()
+            conn.close()
+        else:
+            self.__einloggen()
+
+    def add_to_warenkorb(self, produkt_id: int, menge: int):
+        self.__warenkorb._add_bestellposten(produkt_id=produkt_id, menge=menge)
+
+    def show_warenkorb(self) -> None:
+        print(self.__warenkorb._show_bestellposten())
+
+    def delete_from_warenkorb(self, produkt_id: int):
+        self.__warenkorb._delete_bestellposten(produkt_id=produkt_id)
+
+    def bestellung_aufgeben(self, adress_id: int, bank_id: int):
+        if self._login_status:
+            self.__warenkorb._save_to_db(self._benutzer_id, adress_id, bank_id)
+
+            self.__warenkorb = self.__neuer_warenkorb()
+        else:
+            self.__einloggen()
 
     # Interne Methoden:
 
@@ -183,6 +234,5 @@ class Kunde(Benutzer):
             self.__bestellhistorie.append(bestellung)
 
     def __neuer_warenkorb(self):
-        # todo: methode wirklich nötig?
         bestellung = Bestellung(db_path=self._db_path, warenhaus=self.__warenhaus)
         return bestellung

@@ -18,3 +18,6 @@ class Produkt():
 
     def get_produktbezeichnung(self):
         return self._produktbezeichnung
+
+    def get_produkt_id(self):
+        return self._produkt_id

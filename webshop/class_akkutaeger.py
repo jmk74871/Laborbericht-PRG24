@@ -13,4 +13,4 @@ class Akkutraeger(Produkt):
 
     def get_info(self):
         return f'Akkuträger {self._produktbezeichnung} mit einer Breite von {self.__breite} mm und Höhe ' \
-               f'von {self.__hoehe}mm.\n Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
+               f'von {self.__hoehe}mm.\n   Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'

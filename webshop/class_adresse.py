@@ -22,8 +22,8 @@ class Adresse():
         if stadt_neu is not None:
             self.__stadt = stadt_neu
 
-    def display_adresse(self):
-        print(f'{self.__strasse} {self.__hausnummer} \n {self.__plz} {self.__stadt}')
+    def get_adressinfo(self):
+        return f'\n{self.__strasse} {self.__hausnummer} \n{self.__plz} {self.__stadt}\nID: {self.__adress_id}\n'
 
 
 

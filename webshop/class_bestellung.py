@@ -28,7 +28,7 @@ class Bestellung():
         else:
             print(f'Das Produkt mit der ID {produkt_id} konnte nicht im Produktkatalog gefunden werden.')
 
-    def _warenkorb_anzeigen(self) -> str:
+    def _show_bestellposten(self) -> str:
         returnstring = ''
         returnstring += '\nIhr aktueller Warenkorb enthält:'
         gesamtpreis = 0
@@ -40,18 +40,27 @@ class Bestellung():
 
         return returnstring
 
-    def _save_to_db(self, kunden_id: int):
+    def _delete_bestellposten(self, produkt_id: int):
+        self.__bestellposten = [posten for posten in self.__bestellposten if posten.get_produkt_id() != produkt_id]
+
+    def _save_to_db(self, benutzer_id: int, adress_id: int, bank_id: int):
         # todo: create method to save to db after order is placed
         conn = sqlite3.connect(self.__db_path)
         cursor = conn.cursor()
 
         # add to BESTELLUNGEN-DB
         cursor.execute(
-            f"INSERT INTO BESTELLUNGEN (BENUTZER_ID, BESTELLDATUM, STATUS) "
-            f"VALUES(:benutzer_id, :bestelldatum, :status);",
-            {'benutzer_id': kunden_id, 'bestelldatum': datetime.now(), 'status': 'in Bearbeitung'})
+            f"INSERT INTO BESTELLUNGEN (BENUTZER_ID, BESTELLDATUM, STATUS, ADRESS_ID, BANK_ID) "
+            f"VALUES(:benutzer_id, :bestelldatum, :status, :adress_id, :bank_id);",
+            {'benutzer_id': benutzer_id, 'bestelldatum': datetime.now(), 'status': 'in Bearbeitung',
+             'adress_id': adress_id, 'bank_id': bank_id})
         conn.commit()
+
+        self.__bestell_id = cursor.lastrowid
         self.__bestellstatus = 'in Bearbeitung'
+
+        for posten in self.__bestellposten:
+            posten._save_to_db(bestell_id=self.__bestell_id)
 
     # interne Methoden
 

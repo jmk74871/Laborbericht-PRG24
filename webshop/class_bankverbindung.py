@@ -16,13 +16,11 @@ class Bankverbindung():
         if bic_neu is not None:
             self.__bic = bic_neu
 
-    def display_bankinfo(self):
-        print(f'Kontoinhaber: {self.__kontoinhaber} \n\n Iban: {self.__iban} \n\n bic: {self.__bic}')
+    def get_bankinfo(self):
+        return f'\nKontoinhaber: {self.__kontoinhaber}\nIban: {self.__iban} \nBIC: {self.__bic}' \
+               f'\nID: {self.__bank_id}\n'
 
     def get_id(self):
         return self.__bank_id
 
-    def save_to_db(self):
-        # ToDO: create method to save to db
-        pass
 
