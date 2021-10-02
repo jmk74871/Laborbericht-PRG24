@@ -15,3 +15,6 @@ class Produkt():
 
     def get_price(self):
         return self._preis
+
+    def get_produktbezeichnung(self):
+        return self._produktbezeichnung

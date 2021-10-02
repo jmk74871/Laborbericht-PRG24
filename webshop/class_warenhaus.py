@@ -108,3 +108,12 @@ class Warenhaus():
 
         return True
 
+    def _check_exist(self, prodikt_id: int):
+        if self.__chek_if_update_needed():
+            try:
+                self.__katalog[prodikt_id]
+                return True
+            except KeyError:
+                return False
+
+

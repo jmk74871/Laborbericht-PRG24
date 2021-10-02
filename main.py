@@ -15,15 +15,21 @@ def test_admin_creating_products():
     user.add_verdampferkopf('B-Vape V3-Mesh', 0.5, 'B-Vape', 'Stainles Steel Mesh', 0.33)
 
 def test_user_loging_in():
-    user = webshop.class_kunde.Kunde('PeterV', 'pass234')
-    user.add_adresse('Stuttgarter Str.', 3, '74700', 'Stuttgart')
+    warenhaus = webshop.class_warenhaus.Warenhaus()
+    user = webshop.class_kunde.Kunde('PeterV', 'pass234', warenhaus)
+    # user.add_adresse('Stuttgarter Str.', 3, '74700', 'Stuttgart')
+    user.zum_warenkorb_hinzufuegen(1, 1)
+    user.zum_warenkorb_hinzufuegen(7, 3)
+    user.zum_warenkorb_hinzufuegen(4, 2)
+    user.warenkorb_anzeigen()
+
 
 
 def main():
     if not os.path.exists('test_db.db'):
         run_setup()
-    # test_user_loging_in()
-    test_admin_creating_products()
+    test_user_loging_in()
+    # test_admin_creating_products()
     pass
 
 

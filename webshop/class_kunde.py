@@ -3,11 +3,13 @@ from webshop.class_adresse import Adresse
 from webshop.class_bankverbindung import Bankverbindung
 from webshop.class_benutzer import Benutzer
 from webshop.class_bestellung import Bestellung
+from webshop.class_warenhaus import Warenhaus
 
 
 class Kunde(Benutzer):
-    def __init__(self, benutzer_name: str, passwort: str) -> object:
+    def __init__(self, benutzer_name: str, passwort: str, warenhaus: Warenhaus) -> object:
         super().__init__(benutzer_name, passwort)
+        self.__warenhaus = warenhaus
         self.__vorname = None
         self.__nachname = None
         self.__adressen = []
@@ -63,8 +65,13 @@ class Kunde(Benutzer):
         else:
             print('Bitte zuerst anmelden.')
 
-    def add_product_to_chart(self, produkt_id: int, menge: int):
+    def zum_warenkorb_hinzufuegen(self, produkt_id: int, menge: int):
         self.__warenkorb._add_bestellposten(produkt_id, menge)
+
+    def warenkorb_anzeigen(self):
+        self.__warenkorb._display_warenkorb()
+
+
 
     # Interne Methoden:
 
@@ -155,7 +162,6 @@ class Kunde(Benutzer):
             bankverbindung = Bankverbindung(ds['BANK_ID'], ds['KONTOINHABER'], ds['IBAN'], ds['BIC'])
             self.__bankverbindungen.append(bankverbindung)
 
-
     def __get_bestellungen_from_db(self):
         self.__bestellhistorie = []
 
@@ -171,12 +177,11 @@ class Kunde(Benutzer):
 
         for ds in res:
             bestellung = Bestellung(db_path=self._db_path, bestell_id=ds['BESTELL_ID'],
-                                    bestelldatum=ds['BESTELLDATUM'], bestellstatus=ds['STATUS'])
+                                    bestelldatum=ds['BESTELLDATUM'], bestellstatus=ds['STATUS'], warenhaus=self.__warenhaus)
             self.__bestellhistorie.append(bestellung)
-
 
     def __neuer_warenkorb(self):
         # todo: methode wirklich nötig?
-        bestellung = Bestellung(db_path=self._db_path)
+        bestellung = Bestellung(db_path=self._db_path, warenhaus=self.__warenhaus)
         return bestellung
 

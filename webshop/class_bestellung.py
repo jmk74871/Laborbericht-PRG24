@@ -1,13 +1,14 @@
 from datetime import datetime
 import sqlite3
 from webshop.class_bestellposten import Bestellposten
+from webshop.class_warenhaus import Warenhaus
 
 
 class Bestellung():
 
-    def __init__(self, db_path: str, bestell_id=None, bestelldatum=None, bestellstatus='offen'):
+    def __init__(self, db_path: str, warenhaus: Warenhaus, bestell_id=None, bestelldatum=None, bestellstatus='offen'):
         # todo: add enum for bestellstatus, also needs a change in the DB (Text to Integer)
-
+        self.__warenhaus = warenhaus
         self.__bestell_id = bestell_id
         self.__bestelldatum = bestelldatum
         self.__bestellstatus = bestellstatus
@@ -20,20 +21,24 @@ class Bestellung():
     # öffentliche Schnitstellen - sollen über andere Klassen angesprochen werden
 
     def _add_bestellposten(self, produkt_id: int, menge: int):
-        if self.__bestellstatus == 'offen':
-            conn = sqlite3.connect(self.__db_path)
-            cursor = conn.cursor()
+        if self.__bestellstatus == 'offen' and self.__warenhaus._check_exist(produkt_id):
+            posten = Bestellposten(produkt_id=produkt_id, menge=menge, warenhaus=self.__warenhaus)
+            self.__bestellposten.append(posten)
+        else:
+            print(f'Das Produkt mit der ID {produkt_id} konnte nicht im Produktkatalog gefunden werden.')
 
-            # add to BESTELLPOSTEN-DB
-            cursor.execute(
-                f"INSERT INTO BESTELLPOSTEN (BESTELL_ID, PRODUKT_ID, MENGE)"
-                f"VALUES(:bestell_id, :prdukt_id, :menge);",
-                {'bestell_id': self.__bestell_id, 'produkt_id': produkt_id, 'menge': menge})
-            conn.commit()
+    def _display_warenkorb(self):
+        print('\nIhr aktueller Warenkorb enthält:')
+        gesamtpreis = 0
+        for bestellposten in self.__bestellposten:
+            bestellposten.display_info()
+            gesamtpreis += bestellposten.get_total()
 
-            print(f'Adresse in der {strasse} {hausnummer} in {stadt} erfolgreich angelegt.')
+        print(f'Der Gesamtpreis aller Produkte im aktuellen Warenkorbes beträgt: {gesamtpreis:.2f}€')
 
-            self.__get_bestellposten_from_db()
+    def _save_to_db(self, kunden_id: int):
+        # todo: create method to save to db after order is placed
+        pass
 
     # interne Methoden
 
@@ -67,7 +72,7 @@ class Bestellung():
         conn.close()
 
         for ds in res:
-            bestellposten = Bestellung(ds['POSTEN_ID'], ds['PRODUKT_ID'], ds['MENGE'])
+            bestellposten = Bestellung(ds['POSTEN_ID'], ds['PRODUKT_ID'], ds['MENGE'], self.__warenhaus)
             self.__bestellposten.append(bestellposten)
 
 
