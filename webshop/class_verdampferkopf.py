@@ -9,8 +9,8 @@ class Verdampferkopf(Produkt):
         self.__wiederstand = float(wiederstand)
 
     def display_info(self):
-        print(f'Verdampferkopf {self._produktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand '
-              f'von {self.__wiederstand} Ohm. \nPreis:{self._preis}')
+        return f'Verdampferkopf {self._produktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand ' \
+               f'von {self.__wiederstand} Ohm. \nPreis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
 
     def display_matching(self):
         # todo: method to display matching verdampfer.

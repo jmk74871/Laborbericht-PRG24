@@ -1,5 +1,4 @@
 from webshop.class_produkt import Produkt
-import sqlite3
 
 
 class Verdampfer(Produkt):
@@ -12,5 +11,5 @@ class Verdampfer(Produkt):
         self.__fuellsystem = str(fuellsystem)
 
     def display_info(self):
-        print(f'Verdampfer {self._produktbezeichnung} mit einem Durchmesser von {self.__durchmesser}mm und Höhe '
-              f'von {self.__hoehe}mm.\n Preis:{self._preis}')
+        return f'Verdampfer {self._produktbezeichnung} mit einem Durchmesser von {self.__durchmesser}mm und Höhe ' \
+               f'von {self.__hoehe}mm.\n Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'

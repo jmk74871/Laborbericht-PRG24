@@ -13,4 +13,4 @@ class Starterset(Produkt):
         # for component in components:
         #     component.display_info()
 
-        print(f'Preis:{self._preis}')
+        print(f'Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}')

@@ -68,8 +68,8 @@ class Kunde(Benutzer):
     def zum_warenkorb_hinzufuegen(self, produkt_id: int, menge: int):
         self.__warenkorb._add_bestellposten(produkt_id, menge)
 
-    def warenkorb_anzeigen(self):
-        self.__warenkorb._display_warenkorb()
+    def warenkorb_anzeigen(self) -> None:
+        print(self.__warenkorb._display_warenkorb())
 
 
 

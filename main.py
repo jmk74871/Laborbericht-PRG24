@@ -16,11 +16,13 @@ def test_admin_creating_products():
 
 def test_user_loging_in():
     warenhaus = webshop.class_warenhaus.Warenhaus()
+    warenhaus.display_produktinfo()
     user = webshop.class_kunde.Kunde('PeterV', 'pass234', warenhaus)
     # user.add_adresse('Stuttgarter Str.', 3, '74700', 'Stuttgart')
     user.zum_warenkorb_hinzufuegen(1, 1)
-    user.zum_warenkorb_hinzufuegen(7, 3)
-    user.zum_warenkorb_hinzufuegen(4, 2)
+    user.zum_warenkorb_hinzufuegen(4, 1)
+    user.zum_warenkorb_hinzufuegen(11, 2)
+    user.zum_warenkorb_hinzufuegen(10, 2)
     user.warenkorb_anzeigen()
 
 

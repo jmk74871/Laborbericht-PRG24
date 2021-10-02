@@ -13,10 +13,11 @@ class Bestellposten():
     def get_total(self) -> float:
         return float(self.__warenhaus.get_by_id(self.__produkt_id).get_price() * self.__menge)
 
-    def display_info(self):
+    def display_info(self) -> str:
+
         prod = self.__warenhaus.get_by_id(self.__produkt_id)
-        print(f'{self.__menge} mal {prod.get_produktbezeichnung()} mit einem Stückpreis von {prod.get_price():.2f}€ \n '
-              f'Gesammtpreis: {self.get_total():.2f}€')
+        return f"\n{self.__menge} mal {prod.get_produktbezeichnung()} mit einem Stückpreis von {prod.get_price():.2f}€" \
+               f"\n Gesammtpreis: {self.get_total():.2f}€"
 
     def _save_to_db(self, bestell_id: int):
         # todo: create method to save to db after order is placed

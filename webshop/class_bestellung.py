@@ -27,14 +27,17 @@ class Bestellung():
         else:
             print(f'Das Produkt mit der ID {produkt_id} konnte nicht im Produktkatalog gefunden werden.')
 
-    def _display_warenkorb(self):
-        print('\nIhr aktueller Warenkorb enthält:')
+    def _display_warenkorb(self) -> str:
+        returnstring = ''
+        returnstring += '\nIhr aktueller Warenkorb enthält:'
         gesamtpreis = 0
         for bestellposten in self.__bestellposten:
-            bestellposten.display_info()
+            returnstring += bestellposten.display_info()
             gesamtpreis += bestellposten.get_total()
 
-        print(f'Der Gesamtpreis aller Produkte im aktuellen Warenkorbes beträgt: {gesamtpreis:.2f}€')
+        returnstring += f'\n\nDer Gesamtpreis aller Produkte im aktuellen Warenkorbes beträgt: {gesamtpreis:.2f}€'
+
+        return returnstring
 
     def _save_to_db(self, kunden_id: int):
         # todo: create method to save to db after order is placed
