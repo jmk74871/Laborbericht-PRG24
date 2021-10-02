@@ -11,6 +11,8 @@ class Benutzer():
         self._login_status = False
         self._benutzer_id = None
 
+    def ausloggen(self):
+        self._login_status = False
 
     def _benutzer_einloggen(self) -> bool:
         conn = sqlite3.connect(self._db_path)
@@ -44,11 +46,3 @@ class Benutzer():
         else:
             conn.close()
             return False
-
-
-#     if bool(ds['IS_ADMIN']) and isinstance(self, Administrator):
-#         user = Administrator(benutzer_id=ds['BENUTZER_ID'], benutzer_name=ds['BENUTZERNAME'], passwort=ds['PASSWORT'], personal_nummer=ds['PERSONALNUMMER'], abteilung=ds['ABTEILUNG'])
-#     elif bool(ds['IS_KUNDE']):
-#         user = Kunde(benutzer_id=ds['BENUTZER_ID'], benutzer_name=ds['BENUTZERNAME'], passwort=ds['PASSWORT'], vorname=ds['VORNAME'], nachname=ds['NACHNAME'])
-# else:
-#     print('Login fehlgeschlagen!')
