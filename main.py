@@ -14,6 +14,9 @@ def test_admin_creating_products():
     user.add_verdampferkopf('B-Vape V3', 0.43, 'B-Vape', 'Stainles Steel', 0.5)
     user.add_verdampferkopf('B-Vape V3-Mesh', 0.6, 'B-Vape', 'Stainles Steel Mesh', 0.33)
 
+    user.define_matching(verdampfer_id=2, verdampferkopf_id=5)
+    user.define_matching(verdampfer_id=2, verdampferkopf_id=6)
+
     user.add_set('Easy Starter Set', 12.99, 'VaperG + aspire', 4, 1, 6)
 
 def test_user_placing_order():

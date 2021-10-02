@@ -148,3 +148,15 @@ class Administrator(Benutzer):
         print(f'{benutzername} wurde als administrator angelegt.')
         conn.commit()
         conn.close()
+
+    def define_matching(self, verdampfer_id: int, verdampferkopf_id: int):
+        conn = sqlite3.connect(self._db_path)
+        cursor = conn.cursor()
+
+        # add to PASST_ZU-TABLE:
+        cursor.execute("INSERT INTO PASST_ZU (VERDAMPFER_ID, VERDAMPFERKOPF_ID) "
+                       "VALUES(:verdampfer_id, :verdampferkopf_id)",
+                       {'verdampfer_id': verdampfer_id, 'verdampferkopf_id': verdampferkopf_id})
+        conn.commit()
+        conn.close()
+
