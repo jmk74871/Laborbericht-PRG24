@@ -27,7 +27,7 @@ class Kunde(Benutzer):
 
     # Öffentliche Schnittstellen:
 
-    def add_adresse(self, strasse: str, hausnummer: int, plz: str, stadt: str):
+    def add_adresse(self, strasse: str, hausnummer: int, plz: str, stadt: str) -> None:
         if self._login_status:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
@@ -46,7 +46,7 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def show_adressen(self):
+    def show_adressen(self) -> None:
         if self._login_status:
             displaystring = ''
             for adresse in self.__adressen:
@@ -55,7 +55,7 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def delete_adresse(self, adress_id: int):
+    def delete_adresse(self, adress_id: int) -> None:
         if self._login_status:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
@@ -66,7 +66,7 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def add_bankverbindung(self, kontoinhaber: str, iban: str, bic: str):
+    def add_bankverbindung(self, kontoinhaber: str, iban: str, bic: str) -> None:
         if self._login_status:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
@@ -84,7 +84,7 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def show_bankverbindungen(self):
+    def show_bankverbindungen(self) -> None:
         if self._login_status:
             displaystring = ''
             for bankverbindung in self.__bankverbindungen:
@@ -93,7 +93,7 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def delete_bankverbindungen(self, bank_id: int):
+    def delete_bankverbindungen(self, bank_id: int) -> None:
         if self._login_status:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
@@ -104,16 +104,16 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def add_to_warenkorb(self, produkt_id: int, menge: int):
+    def add_to_warenkorb(self, produkt_id: int, menge: int) -> None:
         self.__warenkorb._add_bestellposten(produkt_id=produkt_id, menge=menge)
 
     def show_warenkorb(self) -> None:
         print(self.__warenkorb._show_bestellposten())
 
-    def delete_from_warenkorb(self, produkt_id: int):
+    def delete_from_warenkorb(self, produkt_id: int) -> None:
         self.__warenkorb._delete_bestellposten(produkt_id=produkt_id)
 
-    def bestellung_aufgeben(self, adress_id: int, bank_id: int):
+    def bestellung_aufgeben(self, adress_id: int, bank_id: int) -> None:
         if self._login_status:
             self.__warenkorb._save_to_db(self._benutzer_id, adress_id, bank_id)
 
@@ -121,11 +121,11 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def show_kundendaten(self):
+    def show_kundendaten(self) -> None:
         print(f'Ihre Daten lauten: \nVorname: {self.__vorname}\nNachname:{self.__nachname}.'
               f'\nIhr Benutzername lautet {self.__benutzername}.')
 
-    def update_kundendaten(self, vorname=None, nachname=None):
+    def update_kundendaten(self, vorname=None, nachname=None) -> None:
         if self._login_status:
             if vorname is None:
                 vorname = self.__vorname
@@ -139,7 +139,7 @@ class Kunde(Benutzer):
         else:
             self.__einloggen()
 
-    def delete_kundendaten(self):
+    def delete_kundendaten(self) -> None:
         if self._login_status:
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
@@ -152,7 +152,7 @@ class Kunde(Benutzer):
 
     # Interne Methoden:
 
-    def __einloggen(self):
+    def __einloggen(self) -> None:
         if self._benutzer_einloggen():
             conn = sqlite3.connect(self._db_path)
             conn.row_factory = sqlite3.Row
@@ -207,7 +207,7 @@ class Kunde(Benutzer):
 
             self.__einloggen()
 
-    def __get_adressen_from_db(self):
+    def __get_adressen_from_db(self) -> None:
 
         self.__adressen = []
 
@@ -224,7 +224,7 @@ class Kunde(Benutzer):
             adresse = Adresse(ds['ADRESS_ID'], ds['STRASSE'], ds['HAUSNUMMER'], ds['PLZ'], ds['STADT'])
             self.__adressen.append(adresse)
 
-    def __get_bankinfo_from_db(self):
+    def __get_bankinfo_from_db(self) -> None:
         self.__bankverbindungen = []
 
         conn = sqlite3.connect(self._db_path)
@@ -241,7 +241,7 @@ class Kunde(Benutzer):
             bankverbindung = Bankverbindung(ds['BANK_ID'], ds['KONTOINHABER'], ds['IBAN'], ds['BIC'])
             self.__bankverbindungen.append(bankverbindung)
 
-    def __get_bestellungen_from_db(self):
+    def __get_bestellungen_from_db(self) -> None:
         self.__bestellhistorie = []
 
         conn = sqlite3.connect(self._db_path)
@@ -260,5 +260,5 @@ class Kunde(Benutzer):
                                     warenhaus=self.__warenhaus)
             self.__bestellhistorie.append(bestellung)
 
-    def __neuer_warenkorb(self):
+    def __neuer_warenkorb(self) -> Bestellung:
         return Bestellung(db_path=self._db_path, warenhaus=self.__warenhaus)

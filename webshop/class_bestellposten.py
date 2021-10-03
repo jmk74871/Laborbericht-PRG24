@@ -22,7 +22,7 @@ class Bestellposten():
     def get_produkt_id(self) -> int:
         return self.__produkt_id
 
-    def _save_to_db(self, bestell_id: int):
+    def _save_to_db(self, bestell_id: int) -> None:
         conn = sqlite3.connect(self.__db_path)
         cursor = conn.cursor()
 

@@ -9,49 +9,6 @@ class Administrator(Benutzer):
         self.__abteilung = None
         self.__einloggen()
 
-    def __einloggen(self):
-        if self._benutzer_einloggen():
-            conn = sqlite3.connect(self._db_path)
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-
-            cursor.execute("SELECT * from BENUTZER WHERE BENUTZER_ID = :benutzer_id",
-                           {"benutzer_id": self._benutzer_id})
-
-            res = cursor.fetchall()
-
-            if len(res) == 1 and bool(res[0]['IS_ADMIN']):
-                ds = res[0]
-                self.__personal_nummer = ds['PERSONALNUMMER']
-                self.__abteilung = ds['ABTEILUNG']
-                self._login_status = True
-            else:
-                print('Login fehlgeschlagen! Bitte benutze das Anmeldeportal für Kunden!')
-
-
-    def __save_to_prod_db(self, produktbezeichnung: str, preis: float, hersteller: str) -> int:
-        try:
-            conn = sqlite3.connect(self._db_path)
-            cursor = conn.cursor()
-
-            # add to PRODUKT-DB
-            cursor.execute(
-                f"INSERT INTO PRODUKTE(PRODUKTBEZEICHNUNG,PREIS, HERSTELLER) "
-                f"VALUES(:produktbezeichnung,:preis,:hersteller);",
-                {'produktbezeichnung': produktbezeichnung, 'preis': preis, 'hersteller': hersteller})
-            conn.commit()
-            # get id
-            produkt_id = int(cursor.lastrowid)
-            conn.close()
-
-            return produkt_id
-
-        except Exception as e:
-            print(e)
-            return 0
-
-
-
     def add_verdampfer(self, produktbezeichnung: str, preis: float, hersteller: str, durchmesser: float, hoehe: float,
                        fuellsystem: str) -> None:
 
@@ -160,3 +117,42 @@ class Administrator(Benutzer):
         conn.commit()
         conn.close()
 
+    def __einloggen(self):
+        if self._benutzer_einloggen():
+            conn = sqlite3.connect(self._db_path)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT * from BENUTZER WHERE BENUTZER_ID = :benutzer_id",
+                           {"benutzer_id": self._benutzer_id})
+
+            res = cursor.fetchall()
+
+            if len(res) == 1 and bool(res[0]['IS_ADMIN']):
+                ds = res[0]
+                self.__personal_nummer = ds['PERSONALNUMMER']
+                self.__abteilung = ds['ABTEILUNG']
+                self._login_status = True
+            else:
+                print('Login fehlgeschlagen! Bitte benutze das Anmeldeportal für Kunden!')
+
+    def __save_to_prod_db(self, produktbezeichnung: str, preis: float, hersteller: str) -> int:
+        try:
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+
+            # add to PRODUKT-DB
+            cursor.execute(
+                f"INSERT INTO PRODUKTE(PRODUKTBEZEICHNUNG,PREIS, HERSTELLER) "
+                f"VALUES(:produktbezeichnung,:preis,:hersteller);",
+                {'produktbezeichnung': produktbezeichnung, 'preis': preis, 'hersteller': hersteller})
+            conn.commit()
+            # get id
+            produkt_id = int(cursor.lastrowid)
+            conn.close()
+
+            return produkt_id
+
+        except Exception as e:
+            print(e)
+            return 0

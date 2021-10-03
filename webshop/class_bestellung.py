@@ -20,7 +20,7 @@ class Bestellung():
 
     # öffentliche Schnitstellen - sollen über andere Klassen angesprochen werden
 
-    def _add_bestellposten(self, produkt_id: int, menge: int):
+    def _add_bestellposten(self, produkt_id: int, menge: int) -> None:
         if self.__bestellstatus == 'offen' and self.__warenhaus._check_exist(produkt_id):
             posten = Bestellposten(produkt_id=produkt_id, menge=menge, warenhaus=self.__warenhaus,
                                    db_path=self.__db_path)
@@ -40,10 +40,10 @@ class Bestellung():
 
         return returnstring
 
-    def _delete_bestellposten(self, produkt_id: int):
+    def _delete_bestellposten(self, produkt_id: int) -> None:
         self.__bestellposten = [posten for posten in self.__bestellposten if posten.get_produkt_id() != produkt_id]
 
-    def _save_to_db(self, benutzer_id: int, adress_id: int, bank_id: int):
+    def _save_to_db(self, benutzer_id: int, adress_id: int, bank_id: int) -> None:
         conn = sqlite3.connect(self.__db_path)
         cursor = conn.cursor()
 
@@ -63,7 +63,7 @@ class Bestellung():
 
     # interne Methoden
 
-    def __get_bestellposten_from_db(self):
+    def __get_bestellposten_from_db(self) -> None:
         self.__bestellposten = []
 
         conn = sqlite3.connect(self.__db_path)

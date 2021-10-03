@@ -11,7 +11,7 @@ class Benutzer():
         self._login_status = False
         self._benutzer_id = None
 
-    def ausloggen(self):
+    def ausloggen(self) -> None:
         self._login_status = False
 
     def _benutzer_einloggen(self) -> bool:
