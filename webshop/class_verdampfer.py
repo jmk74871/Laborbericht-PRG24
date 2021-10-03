@@ -11,6 +11,6 @@ class Verdampfer(Produkt):
         self.__fuellsystem = str(fuellsystem)
         self.__passende_produkte = list(passende_produkte)
 
-    def get_info(self):
+    def get_info(self) -> str:
         return f'Verdampfer {self._produktbezeichnung} mit einem Durchmesser von {self.__durchmesser}mm und Höhe ' \
                f'von {self.__hoehe}mm.\n   Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'

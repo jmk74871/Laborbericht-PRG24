@@ -10,11 +10,11 @@ class Verdampferkopf(Produkt):
         self.__wiederstand = float(wiederstand)
         self.__passende_produkte = passende_produkte
 
-    def get_info(self):
+    def get_info(self) -> str:
         return f'Verdampferkopf {self._produktbezeichnung} mit {self.__drahtmaterial}-Draht und einem Wiederstand ' \
                f'von {self.__wiederstand} Ohm. \n   Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
 
-    def display_matching(self):
+    def display_matching(self) -> None:
         print('Passende Verdampfer zu diesem Verdampferkopf sind:\n')
 
 

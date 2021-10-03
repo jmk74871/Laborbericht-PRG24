@@ -27,7 +27,7 @@ class Warenhaus():
                 print('Item not found in catalog.')
 
     def display_produktinfo(self, verdampfer: bool =False, verdampferkoepfe: bool =False, akkutraeger: bool =False,
-                            startersets: bool =False, all: bool =True):
+                            startersets: bool =False, all: bool =True) -> None:
 
         if self.__chek_if_update_needed():
             if all:
@@ -57,7 +57,7 @@ class Warenhaus():
 
     # interne Methoden
 
-    def __build_katalog(self):
+    def __build_katalog(self) -> None:
 
         conn = sqlite3.connect(self.__db_path)
         conn.row_factory = sqlite3.Row
@@ -131,7 +131,7 @@ class Warenhaus():
 
         return True
 
-    def _check_exist(self, prodikt_id: int):
+    def _check_exist(self, prodikt_id: int) -> bool:
         if self.__chek_if_update_needed():
             try:
                 self.__katalog[prodikt_id]

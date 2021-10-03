@@ -13,11 +13,11 @@ class Produkt():
         else:
             self._produkt_id = None
 
-    def get_price(self):
+    def get_price(self) -> float:
         return self._preis
 
-    def get_produktbezeichnung(self):
+    def get_produktbezeichnung(self) -> str:
         return self._produktbezeichnung
 
-    def get_produkt_id(self):
+    def get_produkt_id(self) -> int:
         return self._produkt_id

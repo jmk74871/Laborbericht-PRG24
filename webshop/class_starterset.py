@@ -11,7 +11,7 @@ class Starterset(Produkt):
         self.__verdampfer = verdampfer
         self.__verdampferkopf = verdampferkopf
 
-    def get_info(self):
+    def get_info(self) -> dict:
         return {'head': f'\nDas Set {self._produktbezeichnung} enthält:',
                 'components': [self.__akkutaeger, self.__verdampfer, self.__verdampferkopf],
                 'tail': f'Setpreis: {self._preis}€  /  Set-Produkt-ID: {self._produkt_id}\n'}

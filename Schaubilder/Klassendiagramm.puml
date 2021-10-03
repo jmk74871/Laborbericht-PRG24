@@ -1,0 +1,199 @@
+@startuml
+package "Package: webshop" #DDDDDD{
+
+class Administrator{
+- personal_nummer: int
+- abteilung: str
+
++ add_verdampfer(produktbezeichnung: str, preis: float, hersteller: str,
+        durchmesser: float, hoehe: float, fuellsystem: str)
++ add_verdampferkopf(produktbezeichnung: str, preis: float, hersteller: str,
+        drahtmaterial: str, wiederstand: float)
++ add_akkutaeger(produktbezeichnung: str, preis: float, hersteller: str,
+        funktionsweise: str, hoehe: float, breite: float, akkutyp: str)
++ add_set(produktbezeichnung: str, preis: float, hersteller: str,
+        akkutraeger_id: int, verdampfer_id: int, verdampferkopf_id: int)
++ add_admin(benutzername: str, passwort: str, personalnummer: str, abteilung: str)
++ define_matching(verdampfer_id: int, verdampferkopf_id: int)
+- einloggen()
+ -save_to_prod_db(produktbezeichnung: str, preis: float, hersteller: str) -> int:
+}
+
+class Benutzer{
+- passwort: str
+# benutzername: str
+# db_path: str
+# login_status: bool
+# benutzer_id: int
+
+ausloggen()
+# benutzer_einloggen()
+# check_verfuegbar_benutzername(name_to_check: str) -> bool:
+}
+
+class Kunde{
+- warenhaus: Warenhaus
+- nachname: str
+- adressen: Adresse [0..*]
+- bankverbindungen: Bankverbindung [0..*]
+- warenkorb: Bestellung
+- bestellhistorie: Bestellung [0..*]
+
++ add_adresse(strasse: str, hausnummer: int,
+        plz: str, stadt: str) -> None:
++ show_adressen() -> None:
++ delete_adresse(adress_id: int) -> None:
++ add_bankverbindung(kontoinhaber: str,
+        iban: str, bic: str) -> None:
++ show_bankverbindungen() -> None:
++ delete_bankverbindungen(bank_id: int) -> None:
++ add_to_warenkorb(produkt_id: int, menge: int) -> None:
++ show_warenkorb() -> None:
++ delete_from_warenkorb(produkt_id: int) -> None:
++ add_to_warenkorb(produkt_id: int, menge: int) -> None:
++ show_warenkorb() -> None:
++ delete_from_warenkorb(produkt_id: int) -> None:
++ bestellung_aufgeben(adress_id: int, bank_id: int) -> None:
++ show_kundendaten() -> None:
++ update_kundendaten(vorname=None, nachname=None) -> None:
++ delete_kundendaten() -> None:
+- einloggen() -> None:
+- create_new_account() -> None:
+- get_adressen_from_db() -> None:
+- get_bankinfo_from_db() -> None:
+- get_bestellungen_from_db() -> None:
+- neuer_warenkorb() -> Bestellung:
+}
+
+class Adresse{
+- adress_id: int
+- strasse: str
+- hausnummer: int
+- plz: str
+- stadt: str
+
++ def get_adressinfo() -> str:
+}
+
+class Bankverbindung{
+- kontoinhaber: str
+- iban: str
+- bic: str
+- bank_id: int
+
++ get_bankinfo() -> str:
++ get_id() -> int:
+}
+
+class Bestellung{
+- warenhaus: Warenhaus
+- bestell_id: int
+- bestelldatum: timestamp
+- bestellstatus: str
+- bestellposten: Bestellposten
+- db_path: str
+
++ add_bestellposten(produkt_id: int, menge: int) -> None:
++ show_bestellposten() -> str:
++ delete_bestellposten(produkt_id: int) -> None:
++ save_to_db(benutzer_id: int, adress_id: int, bank_id: int) -> None:
+- get_bestellposten_from_db() -> None:
+}
+
+class Bestellposten{
+- warenhaus: Warenhaus
+- posten_id: int
+- produkt_id: int
+- menge: int
+- db_path: str
+
++ get_total() -> float:
++ get_info() -> str:
++ get_produkt_id() -> int:
++ save_to_db(bestell_id: int) -> None:
+}
+
+class Produkt{
+# produktbezeichnung: str
+# hersteller: str
+# preis: float
+# produkt_id: int
+
++ get_price() -> float:
++ get_produktbezeichnung() -> str:
++ get_produkt_id() -> int:
+}
+
+class Starterset{
+- akkutaeger: int
+- verdampfer: int
+- verdampferkopf: int
+
++ get_info() -> dict:
+}
+
+class Verdampfer{
+- hoehe: float
+- durchmesser: float
+- fuellsystem: str
+- passende_produkte: int [0..*]
+
++ get_info() -> str:
+}
+
+class Verdampferkopf{
+- drahtmaterial: str
+- wiederstand: float
+- passende_produkteint [0..*]
+
++ get_info() -> str:
++ display_matching() -> None:
+}
+
+class Akkutraeger{
+- funktionsweise: str
+- hoehe: float
+- breite: float
+- akkutyp: str
+
++ get_info() -> str:
+}
+
+class Warenhaus <nur im flüchtigen Speicher existent>{
+- db_path: str
+- katalog: Produkt [0..*]
+- last_update: timestamp
+
++ get_by_id(id: int) -> object:
++ display_produktinfo(verdampfer: bool =False, verdampferkoepfe: bool =False,
+        akkutraeger: bool =False, startersets: bool =False, all: bool =True) -> None:
++ check_exist(prodikt_id: int) -> bool:
+- build_katalog() -> None:
+- chek_if_update_needed() -> bool:
+}
+
+
+
+Verdampfer --|> Produkt
+Verdampferkopf --|> Produkt
+Akkutraeger --|> Produkt
+Starterset --|> Produkt
+
+Verdampfer "0..*" -- "0..*" Verdampferkopf : passt zu
+
+Administrator --|> Benutzer
+Kunde --|> Benutzer
+
+Bankverbindung "0..*" --o "1" Kunde : hat beliebig viele
+Adresse "0..*" --o "1" Kunde : hat beliebig viele
+Bestellung "0..*" --o "1" Kunde : hat beliebig viele
+Bestellposten "0..*" --* "1" Bestellung : besteht aus
+
+Bestellposten "0..*" --o "1" Warenhaus : holt Infos bei
+Produkt "0..*" o-- "0..*" Warenhaus : liefert Infos über
+
+Starterset "0..*" --* "1" Verdampfer : besteht aus
+Starterset "0..*" --* "1" Verdampferkopf : besteht aus
+Starterset "0..*" --* "1" Akkutraeger : besteht aus
+}
+@enduml

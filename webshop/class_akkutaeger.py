@@ -11,6 +11,6 @@ class Akkutraeger(Produkt):
         self.__breite = float(breite)
         self.__akkutyp = str(akkutyp)
 
-    def get_info(self):
+    def get_info(self) -> str:
         return f'Akkuträger {self._produktbezeichnung} mit einer Breite von {self.__breite} mm und Höhe ' \
                f'von {self.__hoehe}mm.\n   Preis:{self._preis}  /  Produkt-ID: {self._produkt_id}'
