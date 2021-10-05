@@ -122,8 +122,8 @@ class Kunde(Benutzer):
             self.__einloggen()
 
     def show_kundendaten(self) -> None:
-        print(f'Ihre Daten lauten: \nVorname: {self.__vorname}\nNachname:{self.__nachname}.'
-              f'\nIhr Benutzername lautet {self.__benutzername}.')
+        print(f'\nIhre Daten lauten: \nVorname: {self.__vorname}\nNachname:{self.__nachname}'
+              f'\nIhr Benutzername lautet: {self._benutzername}')
 
     def update_kundendaten(self, vorname=None, nachname=None) -> None:
         if self._login_status:
@@ -136,6 +136,21 @@ class Kunde(Benutzer):
             cursor.execute(
                 'UPDATE BENUTZER SET VORNAME = :vorname, NACHNAME = :nachname WHERE BENUTZER_ID = :benutzer_id;',
                 {'vorname': vorname, 'nachname': nachname, 'benutzer_id': self._benutzer_id})
+            conn.commit()
+
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT * from BENUTZER WHERE BENUTZER_ID = :benutzer_id",
+                           {"benutzer_id": self._benutzer_id})
+
+            res = cursor.fetchall()
+            conn.close()
+
+            if len(res) == 1 and bool(res[0]['IS_KUNDE']):
+                ds = res[0]
+                self.__vorname = ds['VORNAME']
+                self.__nachname = ds['NACHNAME']
         else:
             self.__einloggen()
 
@@ -147,6 +162,9 @@ class Kunde(Benutzer):
                            {'benutzer_id': self._benutzer_id})
             conn.commit()
             conn.close()
+
+            self._login_status = False
+            print(f'\nIhre Kundenkonto mit dem Benutzernamen {self._benutzername} wurde erfolgreich gelöscht.\n')
         else:
             self.__einloggen()
 
@@ -168,9 +186,9 @@ class Kunde(Benutzer):
                 self.__vorname = ds['VORNAME']
                 self.__nachname = ds['NACHNAME']
                 self._login_status = True
-                print(f'Wilkommen {self._benutzername} Ihre Anmeldung war erfolgreich!')
+                print(f'\nWilkommen {self._benutzername} Ihre Anmeldung war erfolgreich!\n')
             else:
-                print('Login fehlgeschlagen! Bitte stellen SIe sicher, dass Sie das richtige Anmeldeportal verwenden.')
+                print('Login fehlgeschlagen! Bitte stellen Sie sicher, dass Sie das richtige Anmeldeportal verwenden.')
         else:
             self.__create_new_account()
 
@@ -181,15 +199,15 @@ class Kunde(Benutzer):
             vorname = input('Geben Sie ihren Vornamen an:')
             nachname = input('Geben Sie ihren Nachnamen an:')
 
-            self.__benutzername = None
-            while self.__benutzername is None:
+            self._benutzername = None
+            while self._benutzername is None:
                 check_name = input('Bitte wählen Sie einen Benutzernamen aus.')
                 if self._check_verfuegbar_benutzername(check_name):
-                    self.__benutzername = check_name
+                    self._benutzername = check_name
                 else:
                     print('Benutzername ist bereits vergeben.')
 
-            self.__passwort = input('Geben Sie ein Passwort an:')
+            passwort = input('Geben Sie ein Passwort an:')
 
             conn = sqlite3.connect(self._db_path)
             cursor = conn.cursor()
@@ -197,7 +215,7 @@ class Kunde(Benutzer):
             # add to BENUTZER-TABLE:
             cursor.execute("INSERT INTO BENUTZER (BENUTZERNAME, PASSWORT, IS_ADMIN, IS_KUNDE, VORNAME, NACHNAME) "
                            "VALUES(:benutzername, :passwort, :is_admin, :is_kunde, :vorname, :nachname)",
-                           {'benutzername': self.__benutzername, 'passwort': self.__passwort, 'is_admin': False,
+                           {'benutzername': self._benutzername, 'passwort': passwort, 'is_admin': False,
                             'is_kunde': True,
                             'vorname': vorname, 'nachname': nachname})
             print(f'{vorname} {nachname} wurde als Kunde mit dem Benutzernamen {self._benutzername} angelegt.')

@@ -44,6 +44,8 @@ class Bestellung():
         self.__bestellposten = [posten for posten in self.__bestellposten if posten.get_produkt_id() != produkt_id]
 
     def _save_to_db(self, benutzer_id: int, adress_id: int, bank_id: int) -> None:
+        self.__bestelldatum = datetime.now()
+
         conn = sqlite3.connect(self.__db_path)
         cursor = conn.cursor()
 
@@ -51,15 +53,22 @@ class Bestellung():
         cursor.execute(
             f"INSERT INTO BESTELLUNGEN (BENUTZER_ID, BESTELLDATUM, STATUS, ADRESS_ID, BANK_ID) "
             f"VALUES(:benutzer_id, :bestelldatum, :status, :adress_id, :bank_id);",
-            {'benutzer_id': benutzer_id, 'bestelldatum': datetime.now(), 'status': 'in Bearbeitung',
+            {'benutzer_id': benutzer_id, 'bestelldatum': self.__bestelldatum, 'status': 'in Bearbeitung',
              'adress_id': adress_id, 'bank_id': bank_id})
         conn.commit()
 
         self.__bestell_id = cursor.lastrowid
+
+        conn.close()
+
         self.__bestellstatus = 'in Bearbeitung'
 
         for posten in self.__bestellposten:
             posten._save_to_db(bestell_id=self.__bestell_id)
+
+        date = '%d.%m.%Y'
+        time = '%H:%M'
+        print(f'Ihre Bestellung wurde am {self.__bestelldatum.strftime(date)} um {self.__bestelldatum.strftime(time)} aufgegeben.')
 
     # interne Methoden
 

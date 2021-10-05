@@ -2,7 +2,6 @@ import os.path
 import webshop
 from setup_script import run_setup
 
-# todo: finish/revisit testcases
 
 def test_admin_creating_products():
     user = webshop.class_administrator.Administrator('admin', 'admin')
@@ -20,6 +19,7 @@ def test_admin_creating_products():
     user.define_matching(verdampfer_id=2, verdampferkopf_id=6)
 
     user.add_set('Easy Starter Set', 12.99, 'VaperG + aspire', 4, 1, 6)
+
 
 def test_user_placing_order():
     warenhaus = webshop.class_warenhaus.Warenhaus()
@@ -46,13 +46,23 @@ def test_user_placing_order():
     user.bestellung_aufgeben(adress_id=1, bank_id=1)
 
 
+def test_user_changing_details_and_deleting_account():
+    warenhaus = webshop.class_warenhaus.Warenhaus()
+    user = webshop.class_kunde.Kunde('PeterV', 'pass234', warenhaus)
+
+    user.show_kundendaten()
+    user.update_kundendaten(nachname='Vogel-Frei')
+    user.show_kundendaten()
+
+    user.delete_kundendaten()
+
 
 def main():
     if not os.path.exists('test_db.db'):
         run_setup()
-    test_admin_creating_products()
-    test_user_placing_order()
-    pass
+    # test_admin_creating_products()
+    # test_user_placing_order()
+    # test_user_changing_details_and_deleting_account()
 
 
 if __name__ == "__main__":
