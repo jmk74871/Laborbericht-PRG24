@@ -60,9 +60,9 @@ def test_user_changing_details_and_deleting_account():
 def main():
     if not os.path.exists('test_db.db'):
         run_setup()
-    # test_admin_creating_products()
-    # test_user_placing_order()
-    # test_user_changing_details_and_deleting_account()
+    test_admin_creating_products()
+    test_user_placing_order()
+    test_user_changing_details_and_deleting_account()
 
 
 if __name__ == "__main__":
