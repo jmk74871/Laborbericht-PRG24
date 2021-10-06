@@ -55,7 +55,7 @@ class Kunde{
 + delete_from_warenkorb(produkt_id: int) -> None:
 + bestellung_aufgeben(adress_id: int, bank_id: int) -> None:
 + show_kundendaten() -> None:
-+ update_kundendaten(vorname=None, nachname=None) -> None:
++ update_kundendaten(vorname, nachname) -> None:
 + delete_kundendaten() -> None:
 - einloggen() -> None:
 - create_new_account() -> None:
@@ -165,8 +165,8 @@ class Warenhaus <nur im flüchtigen Speicher existent>{
 - last_update: timestamp
 
 + get_by_id(id: int) -> object:
-+ display_produktinfo(verdampfer: bool =False, verdampferkoepfe: bool =False,
-        akkutraeger: bool =False, startersets: bool =False, all: bool =True) -> None:
++ display_produktinfo(verdampfer: bool, verdampferkoepfe: bool,
+        akkutraeger: bool, startersets: bool, all: bool) -> None:
 + check_exist(prodikt_id: int) -> bool:
 - build_katalog() -> None:
 - chek_if_update_needed() -> bool:
